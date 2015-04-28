@@ -24,4 +24,4 @@ $firephp->log($var, 'Iterators');
 More Information:
 
 Please visit firePHP's document page for more information
-	http://www.firephp.org/HQ/Learn.htm
+http://www.firephp.org/HQ/Learn.htm
