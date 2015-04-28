@@ -1,0 +1,21 @@
+
+Usage steps:
+
+1, Include this line in your PHP file
+
+	require_once('FirePHPCore/FirePHP.class.php');
+
+2, Optionally, enable this setting for output buffering
+
+		ob_start();
+
+3, Start using (more examples in home.php),
+
+<?php
+$firephp = FirePHP::getInstance(true);
+
+$firephp->setEnabled(true);  // or FB::
+
+// simple example with array
+$var = array('i'=>10, 'j'=>20);
+$firephp->log($var, 'Iterators');
