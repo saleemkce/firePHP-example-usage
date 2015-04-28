@@ -3,7 +3,7 @@ Usage steps:
 
 1, Include this line in your PHP file
 
-	require_once('FirePHPCore/FirePHP.class.php');
+	require_once('FirePHP/lib/FirePHPCore/FirePHP.class.php');
 
 2, Optionally, enable this setting for output buffering
 
@@ -19,3 +19,9 @@ $firephp->setEnabled(true);  // or FB::
 // simple example with array
 $var = array('i'=>10, 'j'=>20);
 $firephp->log($var, 'Iterators');
+
+
+More Information:
+
+Please visit firePHP's document page for more information
+	http://www.firephp.org/HQ/Learn.htm
