@@ -14,7 +14,7 @@ Usage steps:
 <?php
 $firephp = FirePHP::getInstance(true);
 
-$firephp->setEnabled(true);  // or FB::
+$firephp->setEnabled(true);
 
 // simple example with array
 $var = array('i'=>10, 'j'=>20);
