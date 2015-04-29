@@ -8,7 +8,7 @@
 .DS_Store
 
 # ignore all .zip files
-*.swf
+*.zip
 
 #ignore all .gz files
 *.gz
@@ -44,7 +44,7 @@ assets/videos/
 *.class
 *.dll
 *.exe
-*.o_MERGE
+*.o
 *.so
  
 # Packages #
@@ -73,5 +73,5 @@ assets/videos/
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db_MERGE
+ehthumbs.db
 Thumbs.db
