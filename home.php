@@ -52,3 +52,20 @@ $multiDimArr = array( array( 'Title' => 'rose',
                     )
              );
 $firephp->log($multiDimArr, 'Iterators');
+
+
+/**
+ * Example using class object
+ */
+Class Tests
+{
+    public static function getDate($instance){
+        return array(
+            'classInstance' => $instance,
+            'dateObject' => date('Y-m-d')
+            );
+    }
+}
+$instance = new Tests();
+$data = Tests::getDate($instance);
+$firephp->log($data);
