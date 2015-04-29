@@ -1,0 +1,77 @@
+# ignore all text files
+*.txt
+
+# don't ignore only text_special.txt
+!text_special.txt
+
+# ignore files matching this string
+.DS_Store
+
+# ignore all .zip files
+*.zip
+
+#ignore all .gz files
+*.gz
+
+# ignore all '.log' files in log directory
+log/*.log
+
+# ignore all files in log directory starting with '.log' and contains 0 to 9 character patterns #after '.log.'
+log/*.log.*[0-9]
+
+#ignore all files in photoshop directory & videos directory in assets folder.
+assets/photoshop/
+assets/videos/
+
+#don't ignore file starting with 'tour_' and ending with '.mp4' in 
+#videos directory in assets folder.
+!assets/videos/tour_*.mp4
+
+
+
+# For more information about using .gitignore locally,
+# https://help.github.com/articles/ignoring-files/
+
+#
+#---------------------------------------------------------------------------------------------------
+#
+
+
+# more rules taken from https://gist.github.com/octocat/9257657
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+ 
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+ 
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+ 
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
