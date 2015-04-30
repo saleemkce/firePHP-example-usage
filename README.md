@@ -20,8 +20,7 @@ $firephp->setEnabled(true);
 $var = array('i'=>10, 'j'=>20);
 $firephp->log($var, 'Iterators');
 
-
-More Information:
+More Information available at:
 
 Please visit firePHP's document page for more information
 	http://www.firephp.org/HQ/Learn.htm
