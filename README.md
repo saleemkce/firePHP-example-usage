@@ -17,7 +17,7 @@ $firephp = FirePHP::getInstance(true);
 $firephp->setEnabled(true);
 
 // simple example with array
-$var = array('i'=>10, 'name'=>'joe', 'isMale'=>true, 'weight.kg'=>55.89);
+$var = array('i'=>10, 'name'=>'joe', 'isMale'=>true, 'weight.kg'=>55.89, 'meta'=>json_encode(array('city'=>'Chennai', 'country'=>'India')));
 $firephp->log($var, 'Iterators');
 
 More Information available:
