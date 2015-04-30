@@ -22,5 +22,5 @@ $firephp->log($var, 'Iterators');
 
 More Information available at:
 
-Please visit firePHP's document page for more information
-	http://www.firephp.org/HQ/Learn.htm
+	Please visit firePHP's document page for more information
+		http://www.firephp.org/HQ/Learn.htm
