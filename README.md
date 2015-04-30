@@ -17,10 +17,10 @@ $firephp = FirePHP::getInstance(true);
 $firephp->setEnabled(true);
 
 // simple example with array
-$var = array('i'=>10, 'j'=>20);
+$var = array('i'=>10, 'name'=>'joe', 'isMale'=>true);
 $firephp->log($var, 'Iterators');
 
 More Information available at:
 
 	Please visit firePHP's document page for more information
-		http://www.firephp.org/HQ/Learn.htm
+		http://www.firephp.org/HQ/Learn.htm 
