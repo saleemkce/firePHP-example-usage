@@ -69,3 +69,9 @@ Class Tests
 $instance = new Tests();
 $data = Tests::getDate($instance);
 $firephp->log($data);
+
+/**
+ * Inspecting firePHP object
+ */
+$firephp->log('inspecting firePHP object from console...');
+$firephp->log($firephp);
