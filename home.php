@@ -38,15 +38,16 @@ try {
 
 
 //multi dimension array example
-$multiDimArr = array( array( 'Title' => 'rose', 
+$multiDimArr = array( 
+                array( 'Title' => 'rose', 
                       'Price' => 1.25,
                       'Number' => 15 
                     ),
-               array( 'Title' => 'daisy', 
+                array( 'Title' => 'daisy', 
                       'Price' => 0.75,
                       'Number' => 25,
                     ),
-               array( 'Title' => 'orchid', 
+                array( 'Title' => 'orchid', 
                       'Price' => 1.15,
                       'Number' => 7 
                     )
