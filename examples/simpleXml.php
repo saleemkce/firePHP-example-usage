@@ -44,6 +44,14 @@ $string = <<<XML
 		<YEAR>1982</YEAR>
 	</CD>
 	<CD>
+		<TITLE>Allen Winston</TITLE>
+		<ARTIST>Bob Dylan</ARTIST>
+		<COUNTRY>USA</COUNTRY>
+		<COMPANY>Columbia</COMPANY>
+		<PRICE>20.50</PRICE>
+		<YEAR>1980</YEAR>
+	</CD>
+	<CD>
 		<TITLE>Still got the blues</TITLE>
 		<ARTIST>Gary Moore</ARTIST>
 		<COUNTRY>UK</COUNTRY>
