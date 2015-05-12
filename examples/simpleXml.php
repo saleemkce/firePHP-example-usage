@@ -23,7 +23,7 @@ $string = <<<XML
 		<TITLE>Empire Burlesque</TITLE>
 		<ARTIST>Bob Dylan</ARTIST>
 		<COUNTRY>USA</COUNTRY>
-		<COMPANY>Columbia</COMPANY>
+		<COMPANY>Arizona</COMPANY>
 		<PRICE>10.90</PRICE>
 		<YEAR>1985</YEAR>
 	</CD>
