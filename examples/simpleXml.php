@@ -37,7 +37,7 @@ $string = <<<XML
 	</CD>
 	<CD>
 		<TITLE>Greatest Hits</TITLE>
-		<ARTIST>Dolly Parton</ARTIST>
+		<ARTIST>Dolly</ARTIST>
 		<COUNTRY>USA</COUNTRY>
 		<COMPANY>RCA</COMPANY>
 		<PRICE>9.90</PRICE>
