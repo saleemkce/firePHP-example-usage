@@ -5,7 +5,7 @@
 // Anonymous function
 // assigned to variable
 $greeting = function () {
-	return "Hello world!";
+	return "Hello world!!!";
 }
  
 // Call function
