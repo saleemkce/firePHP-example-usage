@@ -13,6 +13,15 @@
 #ignore all .gz files
 *.gz
 
+#ignore all .7gz files
+*.7gz
+
+#ignore all tar files
+*.tar
+
+#ignore all tar.gz files
+*.tar.gz
+
 # ignore all '.log' files in log directory
 log/*.log
 
