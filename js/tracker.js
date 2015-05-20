@@ -16450,15 +16450,15 @@ if (!windowObjct.PETracker) {
 
                 var linkclick = require('./events/linkclick/eventhandler');
                 sdkEvent = new linkclick.event();
-                sdkEvent.track(null, utilHelper.clone(sdkParam), sdkErrors);
+                sdkEvent.track([], utilHelper.clone(sdkParam), sdkErrors);
 
                 var pageping = require('./events/pageping/eventhandler');
                 sdkEvent = new pageping.event();
-                sdkEvent.track(null, utilHelper.clone(sdkParam), sdkErrors);
+                sdkEvent.track([], utilHelper.clone(sdkParam), sdkErrors);
 
                 var click = require('./events/click/eventhandler');
                 sdkEvent = new click.event();
-                sdkEvent.track(null, utilHelper.clone(sdkParam), sdkErrors);
+                sdkEvent.track([], utilHelper.clone(sdkParam), sdkErrors);
                 
             }
         };
