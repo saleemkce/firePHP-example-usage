@@ -16537,6 +16537,7 @@ if (!windowObjct.PETracker) {
                 if (typeof input.autoTracking !== 'undefined' && input.autoTracking == true) {
                     tracker.autoEnableEvents();
                 }
+                
                 return tracker;
             }
         };
