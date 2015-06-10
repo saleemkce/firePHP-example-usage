@@ -81,7 +81,7 @@ $string = <<<XML
 		<COUNTRY>UK</COUNTRY>
 		<COMPANY>Columbia</COMPANY>
 		<PRICE>25.50</PRICE>
-		<YEAR>1990</YEAR>
+		<YEAR>1975</YEAR>
 	</CD>
 </CATALOG>
 XML;
