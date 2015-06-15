@@ -60,14 +60,6 @@ $string = <<<XML
 		<YEAR>1980</YEAR>
 	</CD>
 	<CD>
-		<TITLE>All in the family</TITLE>
-		<ARTIST>McChann</ARTIST>
-		<COUNTRY>USA</COUNTRY>
-		<COMPANY>Columbia</COMPANY>
-		<PRICE>12.50</PRICE>
-		<YEAR>1950</YEAR>
-	</CD>
-	<CD>
 		<TITLE>Allen Winston Joane</TITLE>
 		<ARTIST>Bob Dylan</ARTIST>
 		<COUNTRY>USA</COUNTRY>
