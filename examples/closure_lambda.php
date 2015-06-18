@@ -33,7 +33,7 @@ $greeting(); // Returns "Hello Philip"
  * Closure with array_walk example
  */ 
 // An array of names
-$users = array("John", "Philip", "Mike", "Ashley", "Evans", "Peters", "Jacobs");
+$users = array("John", "Philip", "Mike", "Ashley", "Evans", "Peters", "Jacobs", "May");
  
 // Pass the array to array_walk
 array_walk($users, function ($name) {
