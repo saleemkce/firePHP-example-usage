@@ -11,7 +11,7 @@ $firephp->setEnabled(true);  // or FB::
 
 // simple example with array
 $var = array('i'=>10, 'j'=>20);
-$firephp->log($var, 'Iterators');
+$firephp->log($var, 'Iterator');
 
 // simple example with json_encode function
 $name = 'saleemkhan';
