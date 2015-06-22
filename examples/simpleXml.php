@@ -32,7 +32,7 @@ $string = <<<XML
 		<ARTIST>Bonnie Tyler</ARTIST>
 		<COUNTRY>UK</COUNTRY>
 		<COMPANY>CBS Records</COMPANY>
-		<PRICE>9.20</PRICE>
+		<PRICE>9.25</PRICE>
 		<YEAR>1988</YEAR>
 	</CD>
 	<CD>
