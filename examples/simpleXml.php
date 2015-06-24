@@ -83,6 +83,14 @@ $string = <<<XML
 		<PRICE>25.50</PRICE>
 		<YEAR>1975</YEAR>
 	</CD>
+	<CD>
+		<TITLE>Hide your heart ||</TITLE>
+		<ARTIST>Bonnie</ARTIST>
+		<COUNTRY>UK</COUNTRY>
+		<COMPANY>CBS Records</COMPANY>
+		<PRICE>10</PRICE>
+		<YEAR>1900</YEAR>
+	</CD>
 </CATALOG>
 XML;
 
