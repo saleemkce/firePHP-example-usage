@@ -17,7 +17,7 @@ echo $greeting();
  * Closure example
  */ 
 // Create a user
-$user = "Philip";
+$user = "Philip Anders";
  
 // Create a Closure
 $greeting = function() use ($user) {
