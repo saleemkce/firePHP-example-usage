@@ -24,7 +24,7 @@ $string = <<<XML
 		<ARTIST>Bob Dylan</ARTIST>
 		<COUNTRY>USA</COUNTRY>
 		<COMPANY>Arizona</COMPANY>
-		<PRICE>10.90</PRICE>
+		<PRICE>10.70</PRICE>
 		<YEAR>1985</YEAR>
 	</CD>
 	<CD>
