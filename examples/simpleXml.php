@@ -25,7 +25,7 @@ $string = <<<XML
 		<COUNTRY>USA</COUNTRY>
 		<COMPANY>Arizona</COMPANY>
 		<PRICE>10.70</PRICE>
-		<YEAR>1985</YEAR>
+		<YEAR>1986</YEAR>
 	</CD>
 	<CD>
 		<TITLE>Hide your heart</TITLE>
