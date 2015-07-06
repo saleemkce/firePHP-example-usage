@@ -21,7 +21,7 @@ $user = "Philip Anders";
  
 // Create a Closure
 $greeting = function() use ($user) {
-  echo "Hello $user Welcome.";
+  echo "Hello $user Welcome";
 };
  
 // Greet the user
