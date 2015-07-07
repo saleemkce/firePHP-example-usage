@@ -1,5 +1,5 @@
 <?php
-namespace env\config;
+//namespace env\config;
 
 return array(
 	'version'=> '2.0.0',
@@ -10,4 +10,50 @@ return array(
     	'production'=> 'http://api.english.com/data/collect',
     	'defaultUrl'=> 'http://devapi.english.com/data/collect'
     	),
+	'data' => array(
+		'appid' => 'PE-APP-1847',
+		'appplatform' => 'web',
+		'campaigncontent' => '',
+		'campaignid' => '',
+		'campaignmedium' => '',
+		'campaignsource' => '',
+		'campaignterm' => '',
+		'cookiedomainname' => '',
+		'cookieprefix' => '',
+		'directorpluginstatus' => '',
+		'documentencoding' => 'UTF-8',
+		'documenthost' => 'devapi.english.com',
+		'documentlocation' => 'http://devapi.english.com/gseservices/aboutus',
+		'documentpage' => '/gseservices/aboutus',
+		'documentsize' => '1352x409',
+		'documenttitle' => 'GSE%20Data%20%26%20Services',
+		'environment' => '',
+		'flashplayerversion' => '18.0 r0',
+		'googlegearpluginstatus' => '',
+		'interactiontype' => 'pageview',
+		'internalsessionid' => '',
+		'iscookieenabled' => true,
+		'isjavaenabled' => true,
+		'latitudelogitude' => '',
+		'pdfpluginstatus' => '',
+		'qtpluginstatus' => '',
+		'realppluginstatus' => '',
+		'screendepth' => '24-bits',
+		'screenresolution' => '1366x768',
+		'sdkversion' => '2.0.0',
+		'timestamp' => '2015-07-06T11:18:15.961Z',
+		'timezone' => '+05:30',
+		'url' => 'http://devapi.english.com/gseservices/aboutus',
+		'useragent' => 'Mozilla%2F5.0%20(Windows%20NT%206.1%3B%20WOW64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F43.0.2357.124%20Safari%2F537.36',
+		'usercountry' => '',
+		'userfirstname' => '',
+		'usergender' => '',
+		'userid' => 'anonymous',
+		'userip' => '',
+		'userlanguage' => '',
+		'userlastname' => '',
+		'userorigin' => '',
+		'userssoorigin' => '',
+		'viewport' => '1364x409',
+		'wmapluginstatus' => '')
 	);

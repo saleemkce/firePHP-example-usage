@@ -1,11 +1,9 @@
 <?php
-require_once('env/config.php');
+$config = require_once('env/config.php');
 // Method: POST, PUT, GET etc
 // Data: array("param" => "value") ==> index.php?param=value
 
-use env\config as config;
-
-var_dump(config);die();
+//use env\config as config;
 
 $url = 'http://devapi.english.com/data/collect';
 
@@ -59,6 +57,8 @@ $rawData = array(
 	);
 $data = json_encode($rawData);
 
+var_dump($data);
+
 // $headers = array(
 //     // "POST ".$page." HTTP/1.0", 
 //     // "Content-type: text/xml;charset=\"utf-8\"", 
@@ -73,41 +73,4 @@ $data = json_encode($rawData);
 //     'Origin': 'devapi.english.com'
 // ); 
 
-function CallAPI($method, $headers, $url, $data = false)
-{
-    $curl = curl_init();
 
-    switch ($method)
-    {
-        case "POST":
-            curl_setopt($curl, CURLOPT_POST, 1);
-
-            if ($data)
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-            break;
-        case "PUT":
-            curl_setopt($curl, CURLOPT_PUT, 1);
-            break;
-        default:
-            if ($data)
-                $url = sprintf("%s?%s", $url, http_build_query($data));
-    }
-
-    // Optional Authentication:
-    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($curl, CURLOPT_USERPWD, "username:password");
-
-    if(count($headers) >= 1) {
-    	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    }
-    
-
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-    $result = curl_exec($curl);
-
-    curl_close($curl);
-
-    return $result;
-}
