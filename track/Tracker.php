@@ -1,7 +1,8 @@
 <?php
 //namespace SDKTracker;
+require_once 'errors/TrackerErrorsException.php';
 
-class Tracker extends Exception
+class Tracker extends TrackerErrorsException
 {
 	protected $appId, $sdkVersion, $appPlatform;
 
@@ -27,12 +28,12 @@ class Tracker extends Exception
     public function methods() {
     	try{
     		if(empty($this->appId) || is_null($this->appId)) {
-    			throw new Exception('Application id is empty!');
+    			throw new TrackerErrorsException('Application id is empty!');
     		}
 
     		die('Everything looks good.');
     	}
-    	catch (Exception $e){
+    	catch (TrackerErrorsException $e){
     		echo 'Caught exception: ',  $e->getMessage(), "\n".
     		$e->getLine();
     	}

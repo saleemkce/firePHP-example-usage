@@ -1,5 +1,5 @@
 <?php
-class TrackerErrors extends Exception
+class TrackerErrorsException extends Exception
 {
     public function errorMessage() {
         //error message
