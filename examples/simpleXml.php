@@ -39,7 +39,7 @@ $string = <<<XML
 		<TITLE>Hide your heart ||</TITLE>
 		<ARTIST>Bonnie</ARTIST>
 		<COUNTRY>UK</COUNTRY>
-		<COMPANY>CBS Records</COMPANY>
+		<COMPANY>CBS Record</COMPANY>
 		<PRICE>10</PRICE>
 		<YEAR>1900</YEAR>
 	</CD>
