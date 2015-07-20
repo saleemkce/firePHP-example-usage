@@ -11,7 +11,8 @@ return array(
     	'defaultUrl'=> 'http://devapi.english.com/data/collect'
     	),
 	'data' => array(
-		'appid' => 'PE-APP-1847',
+		'appID' => 'PE-APP-1847',
+		'sdkVersion' => '2.0.0',
 		'appplatform' => 'web',
 		'campaigncontent' => '',
 		'campaignid' => '',

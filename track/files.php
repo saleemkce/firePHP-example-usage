@@ -74,3 +74,7 @@ var_dump($data);
 // ); 
 
 
+kinesisData = {
+					    Records: bulkRecords,
+					    StreamName: config.kinesis.StreamName,
+					};

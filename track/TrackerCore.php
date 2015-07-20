@@ -2,7 +2,7 @@
 class TrackerCore
 {
 	public trackerProperties = array();
-	
+
 	// public function setupConstants = function(constants) {
 	//     if (_.isObject(constants) && !_.isEmpty(constants)) {
 	//         _.forEach(constants, function(v, k) {
@@ -79,15 +79,15 @@ class TrackerCore
 	}
 
 	public function setScreenResolution = function($width, $height) {
-	    $this->setProperty('screenresolution', $width + 'x' + $height);
+	    $this->setProperty('screenresolution', $width . 'x' . $height);
 	}
 
 	public function setViewPort = function($width, $height) {
-	    $this->setProperty('viewport', $width + 'x' + $height);
+	    $this->setProperty('viewport', $width . 'x' . $height);
 	}
 
 	public function setScreenDepth = function($width, $height) {
-	    $this->setProperty('screendepth', $width + 'x' + $height);
+	    $this->setProperty('screendepth', $width . 'x' . $height);
 	}
 
 	public function setTimezone = function($timezone) {
