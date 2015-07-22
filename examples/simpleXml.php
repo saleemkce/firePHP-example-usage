@@ -36,7 +36,7 @@ $string = <<<XML
 		<YEAR>1988</YEAR>
 	</CD>
 	<CD>
-		<TITLE>Hide your heart ||</TITLE>
+		<TITLE>Hide your heart</TITLE>
 		<ARTIST>Bonnie</ARTIST>
 		<COUNTRY>UK</COUNTRY>
 		<COMPANY>CBS Record</COMPANY>
