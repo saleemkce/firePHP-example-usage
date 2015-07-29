@@ -83,6 +83,14 @@ $string = <<<XML
 		<PRICE>10</PRICE>
 		<YEAR>1900</YEAR>
 	</CD>
+	<CD>
+		<TITLE>Greatest Hits</TITLE>
+		<ARTIST>Dolly</ARTIST>
+		<COUNTRY>USA</COUNTRY>
+		<COMPANY>RCA</COMPANY>
+		<PRICE>9.90</PRICE>
+		<YEAR>1982</YEAR>
+	</CD>
 </CATALOG>
 XML;
 
