@@ -21,7 +21,7 @@ $string = <<<XML
 <CATALOG>
 	<CD>
 		<TITLE>Empire Burlesque</TITLE>
-		<ARTIST>Bob Dylan</ARTIST>
+		<ARTIST>Bob</ARTIST>
 		<COUNTRY>USA</COUNTRY>
 		<COMPANY>Arizona</COMPANY>
 		<PRICE>10.70</PRICE>
