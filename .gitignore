@@ -1,6 +1,9 @@
 # ignore all text files
 *.txt
 
+# ignore PHP composer's vendor directory
+vendor/
+
 # don't ignore only text_special.txt
 !text_special.txt
 
