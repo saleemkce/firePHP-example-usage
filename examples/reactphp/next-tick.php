@@ -25,7 +25,7 @@ require __DIR__.'/../../vendor/autoload.php';
 $loop = React\EventLoop\Factory::create();
 
 $loop->addTimer(
-    2, // add timer in 2 seconds
+    5, // add timer in 5 seconds
     function () {
         echo 'timer' . PHP_EOL;
     }
