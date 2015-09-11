@@ -14,10 +14,12 @@ class TrackerService
     	$url = $this->config['env']['development'];
         $headers = array(
             'PETracker-APP-ID'=> 'PE-APP-1847',
+            'PETracker-sdkVersion' => '2.0.0',
             'Content-Type'=> 'application/json',
             'Origin'=> 'devapi.english.com'
         );
         $data = $this->config['data'];
+        //echo '<pre>';var_dump($data);die();
         $result = $this->CallAPI($method, $headers, $url, $data);
         echo $result;
     }
@@ -62,5 +64,7 @@ class TrackerService
     }
 }
 
-$ts = new TrackerService($config);
-$ts->trackEvent();
+$track = new TrackerService($config);
+// echo '<pre>';
+// var_dump($track);die();
+$track->trackEvent();

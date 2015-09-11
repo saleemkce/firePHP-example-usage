@@ -47,7 +47,7 @@ class TrackerCore
 	}
 
 	public function setUserId = function($userId) {
-	    $this->setProperty('userid', $userId);
+	    $this->setProperty('userID', $userId);
 	}
 
 	public function setUserOrigin = function($origin) {
