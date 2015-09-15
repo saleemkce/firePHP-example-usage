@@ -16,15 +16,17 @@ class TrackerService
             'PETracker-APP-ID'=> 'PE-APP-1847',
             'PETracker-sdkVersion' => '2.0.0',
             'Content-Type'=> 'application/json',
-            'Origin'=> 'devapi.english.com'
+            //'Origin'=> 'devapi.english.com'
         );
         $data = $this->config['data'];
+        $data = array('data' => $data);
+        $data = json_encode($data);
         //echo '<pre>';var_dump($data);die();
-        $result = $this->CallAPI($method, $headers, $url, $data);
+        $result = $this->invokeAPI($method, $headers, $url, $data);
         echo $result;
     }
 
-    public function CallAPI($method, $headers, $url, $data = false)
+    public function invokeAPI($method, $headers, $url, $data)
     {
         $curl = curl_init();
 
@@ -32,9 +34,8 @@ class TrackerService
         {
             case "POST":
                 curl_setopt($curl, CURLOPT_POST, 1);
-
-                if ($data)
-                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json')); 
                 break;
             case "PUT":
                 curl_setopt($curl, CURLOPT_PUT, 1);

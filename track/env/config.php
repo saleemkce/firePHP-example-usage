@@ -13,8 +13,8 @@ return array(
 	'data' => array(
 		'appID' => 'PE-APP-1847',
 		'appPlatform' => 'web',
-		'cookieDomainName' => 'english.com',
-		'cookiePrefix' => '_TEST',
+		//'cookieDomainName' => 'english.com',
+		//'cookiePrefix' => '_TEST',
 		'directorPluginStatus' => 'TEST',
 		'documentEncoding' => 'UTF-8',
 		'documentHost' => 'devapi.english.com',
