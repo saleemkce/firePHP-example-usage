@@ -25,13 +25,13 @@ $string = <<<XML
 		<COUNTRY>USA</COUNTRY>
 		<COMPANY>Arizona</COMPANY>
 		<PRICE>10.70</PRICE>
-		<YEAR>1986</YEAR>
+		<YEAR>1968</YEAR>
 	</CD>
 	<CD>
 		<TITLE>Hide your heart</TITLE>
 		<ARTIST>Bonnie Tyler</ARTIST>
 		<COUNTRY>UK</COUNTRY>
-		<COMPANY>CBS Records</COMPANY>
+		<COMPANY>CBS Records PTY</COMPANY>
 		<PRICE>9.50</PRICE>
 		<YEAR>1988</YEAR>
 	</CD>
