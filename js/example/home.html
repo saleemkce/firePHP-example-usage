@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="elementBuilder.js"></script>
+<title>Testing the scripts</title>
+</head>
+
+<body>
+	<div id="parentContainer"></div>
+<script>
+var eBuilder = new elementBuilder();
+var element = [
+	{text:'google', url:'http://plus.google.com', target: "_blank", id:'googleId', class:'', 'data-node':'google_nodes-anchor'},
+	{text:'Facebook PLC', url:'http://www.facebook.com', id:'', class:'', 'data-node':'facebook_nodes-anchor'},
+	{text:'Linkedin', url:'http://linkedin.com', id:'', class:'Linkedin-class', 'data-node':'linkedin_nodes-anchor'},
+];
+
+eBuilder.generate(element);
+</script>
+</body>
+
+</html>
