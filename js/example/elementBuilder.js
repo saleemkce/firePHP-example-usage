@@ -14,13 +14,14 @@ elementBuilder.prototype.generate = function(element) {
 
 	var htmlBuild = this.buildSubElements(element);
 
+	//document.body.appendChild(p);
 	console.log(htmlBuild);
 
 };
 
 elementBuilder.prototype.buildSubElements = function(element) {
 	var parent = null;
-	parent = document.getElementById('parentContainer');
+	parent = document.getElementById('anchorContainer');
 
 	element.map(function(obj){
 		var subDiv = document.createElement("div");
@@ -41,4 +42,52 @@ elementBuilder.prototype.buildSubElements = function(element) {
 
 	return parent;
 	
+};
+
+elementBuilder.prototype.createMedia = function(type, elementArr){
+	var media,
+		self = this;
+
+	if(type == 'video'){
+		var parent = document.getElementById('videoContainer');
+		elementArr.map(function(element){
+			var mediaType = document.createElement("video");
+
+			for(var key in element['video']) {
+				mediaType.setAttribute(key, element['video'][key]);
+			}
+			
+			media = self.buildSource(mediaType, media, element);
+			parent.appendChild(media);
+		});
+
+	} else	if(type == 'audio') {
+		var parent = document.getElementById('audioContainer');
+		elementArr.map(function(element){
+			var mediaType = document.createElement("audio");
+
+			for(var key in element['audio']) {
+				mediaType.setAttribute(key, element['audio'][key]);
+			}
+			
+			media = self.buildSource(mediaType, media, element);
+			parent.appendChild(media);
+		});
+	}
+	
+	return media;
+};
+
+elementBuilder.prototype.buildSource = function(mediaType, media, element) {
+	//var media;
+	(element['source']).map(function(obj){
+		var source = document.createElement('source');
+		for(key in obj) {
+			source.setAttribute(key, obj[key]);
+		}
+		mediaType.appendChild(source);
+		console.log(mediaType);
+		media = mediaType;
+	});
+	return media;
 };

@@ -7,16 +7,43 @@
 </head>
 
 <body>
-	<div id="parentContainer"></div>
+	<div id="anchorContainer"></div>
+	<div id="videoContainer"></div>
+	<div id="audioContainer"></div>
 <script>
 var eBuilder = new elementBuilder();
 var element = [
-	{text:'google', url:'http://plus.google.com', target: "_blank", id:'googleId', class:'', 'data-node':'google_nodes-anchor'},
+	{text:'google', url:'http://plus.google.com', target: '_blank', id:'googleId', class:'', 'data-node':'google_nodes-anchor'},
 	{text:'Facebook PLC', url:'http://www.facebook.com', id:'', class:'', 'data-node':'facebook_nodes-anchor'},
 	{text:'Linkedin', url:'http://linkedin.com', id:'', class:'Linkedin-class', 'data-node':'linkedin_nodes-anchor'},
 ];
 
 eBuilder.generate(element);
+
+var element = [
+	{
+		video: {height: '500', width:'500', id: 'video-id'}, 
+		source: [
+			{src: 'http://www.w3schools.com/html/mov_bbb.mp4', type:'video/mp4'},
+			{src: 'http://www.w3schools.com/html/mov_bbb.ogg', type:'video/mp4'},
+		]
+	}
+];
+eBuilder.createMedia('video', element);
+
+
+var element = [
+	{
+		audio: {id: 'audio-id', controls: ''}, 
+		source: [
+			{src: 'http://www.w3schools.com/html/horse.mp3', type:'video/mp4'},
+			{src: 'http://www.w3schools.com/html/horse.ogg', type:'video/mp4'},
+		]
+	}
+];
+eBuilder.createMedia('audio', element);
+
+
 </script>
 </body>
 
