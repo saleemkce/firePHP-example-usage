@@ -6,22 +6,25 @@ function elementBuilder() {
 	// elementBuilder contructor function.
 }
 
-elementBuilder.prototype.generate = function(element) {
+elementBuilder.prototype.generate = function(element, elementId) {
 	
 	// for(var i = 0; i < 5; i++) {
 	// 	element.push({text: Math.random(1, 10), url:'http://exmaple.com/?query='+i});
 	// }
 
-	var htmlBuild = this.buildSubElements(element);
+	var htmlBuild = this.buildSubElements(element, elementId);
 
 	//document.body.appendChild(p);
 	console.log(htmlBuild);
 
 };
 
-elementBuilder.prototype.buildSubElements = function(element) {
-	var parent = null;
-	parent = document.getElementById('anchorContainer');
+elementBuilder.prototype.buildSubElements = function(element, elementId) {
+	var parent = document.body;
+
+	if(elementId) {
+		parent = document.getElementById(elementId);
+	}
 
 	element.map(function(obj){
 		var subDiv = document.createElement("div");
@@ -45,49 +48,53 @@ elementBuilder.prototype.buildSubElements = function(element) {
 };
 
 elementBuilder.prototype.createMedia = function(type, elementArr){
-	var media,
-		self = this;
+	var media;
 
 	if(type == 'video'){
 		var parent = document.getElementById('videoContainer');
 		elementArr.map(function(element){
-			var mediaType = document.createElement("video");
+			var video = document.createElement("video");
 
 			for(var key in element['video']) {
-				mediaType.setAttribute(key, element['video'][key]);
+				video.setAttribute(key, element['video'][key]);
 			}
 			
-			media = self.buildSource(mediaType, media, element);
-			parent.appendChild(media);
-		});
+			(element['source']).map(function(obj){
+				var source = document.createElement('source');
+				for(key in obj) {
+					source.setAttribute(key, obj[key]);
+				}
+				video.appendChild(source);
+				media = video;
+			});
 
-	} else	if(type == 'audio') {
-		var parent = document.getElementById('audioContainer');
-		elementArr.map(function(element){
-			var mediaType = document.createElement("audio");
-
-			for(var key in element['audio']) {
-				mediaType.setAttribute(key, element['audio'][key]);
-			}
-			
-			media = self.buildSource(mediaType, media, element);
-			parent.appendChild(media);
+			document.body.appendChild(video);
 		});
 	}
 	
-	return media;
-};
 
-elementBuilder.prototype.buildSource = function(mediaType, media, element) {
-	//var media;
-	(element['source']).map(function(obj){
-		var source = document.createElement('source');
-		for(key in obj) {
-			source.setAttribute(key, obj[key]);
-		}
-		mediaType.appendChild(source);
-		console.log(mediaType);
-		media = mediaType;
-	});
+	if(type == 'audio') {
+		var parent = document.getElementById('audioContainer');
+		elementArr.map(function(element){
+			var audio = document.createElement("audio");
+
+			for(var key in element['audio']) {
+				audio.setAttribute(key, element['audio'][key]);
+			}
+			
+			(element['source']).map(function(obj){
+				var source = document.createElement('source');
+				for(key in obj) {
+					source.setAttribute(key, obj[key]);
+				}
+				audio.appendChild(source);
+				media = audio;
+			});
+
+			document.body.appendChild(audio);
+		});
+	}
+
+	console.log(parent);
 	return media;
 };
