@@ -6,28 +6,70 @@ function elementBuilder() {
 	// elementBuilder contructor function.
 }
 
-elementBuilder.prototype.generate = function(element, elementId) {
-	
-	// for(var i = 0; i < 5; i++) {
-	// 	element.push({text: Math.random(1, 10), url:'http://exmaple.com/?query='+i});
-	// }
-
-	var htmlBuild = this.buildSubElements(element, elementId);
-
-	//document.body.appendChild(p);
+elementBuilder.prototype.createList = function(element, elementId, listAttribs) {
+	var htmlBuild = this.buildSubElements(element, elementId, listAttribs);
 	console.log(htmlBuild);
 
 };
 
-elementBuilder.prototype.buildSubElements = function(element, elementId) {
+elementBuilder.prototype.createContainer = function(element, elementType, elementId) {
+	var parent = document.body;
+	if(elementId) {
+		parent = document.getElementById(elementId);
+	}
+
+	var htmlElement = document.createElement(elementType);
+	var iteration;
+
+	element.map(function(obj){
+		var text = document.createTextNode(obj['text'] || '');
+		iteration = ((Object.keys(obj)).indexOf('iteration') > -1) ? obj['iteration'] : null;
+		if(iteration || iteration === 0) {
+			delete obj.iteration;
+		}
+
+		for(var key in obj) {
+			if(key !== 'text') {
+				htmlElement.setAttribute(key, obj[key]);
+			}
+		}
+		htmlElement.appendChild(text);
+	});
+
+	if(iteration) {
+		for(var i = 0; i < iteration; i++) {
+			parent.appendChild(htmlElement);
+			console.log(htmlElement);
+			console.log(parent);
+		}
+	} else {
+		parent.appendChild(htmlElement);
+	}
+
+	return parent;
+};
+
+elementBuilder.prototype.buildSubElements = function(element, elementId, listAttribs) {
 	var parent = document.body;
 
 	if(elementId) {
 		parent = document.getElementById(elementId);
 	}
 
+	var unorderedList = document.createElement('ul');
+	// adding UL properties
+	for(var key in listAttribs.ul){
+		unorderedList.setAttribute(key, listAttribs.ul[key]);
+	}
+
 	element.map(function(obj){
-		var subDiv = document.createElement("div");
+		var list = document.createElement('li');
+		// adding LI properties
+		for(var key in listAttribs.li){
+			list.setAttribute(key, listAttribs.li[key]);
+		}
+
+
 		var anchor = document.createElement('a');
 		var text = document.createTextNode(obj['text']);
 		anchor.setAttribute("href", obj['url']);
@@ -39,9 +81,11 @@ elementBuilder.prototype.buildSubElements = function(element, elementId) {
 		    }
 		}
 		anchor.appendChild(text);
-	    subDiv.appendChild(anchor);
-		parent.appendChild(subDiv);
+	    list.appendChild(anchor);
+		unorderedList.appendChild(list);
 	});
+
+	parent = parent.appendChild(unorderedList);
 
 	return parent;
 	
@@ -97,4 +141,49 @@ elementBuilder.prototype.createMedia = function(type, elementArr){
 
 	console.log(parent);
 	return media;
+};
+
+elementBuilder.prototype.addScript = function(element) {
+	var parent = document.body;
+	element.map(function(obj){
+		var script = document.createElement('script');
+		for(var key in obj) {
+			if(key == 'async') {
+				if(obj[key] == true){
+					script.setAttribute(key, '');
+				}
+			} else {
+				script.setAttribute(key, obj[key]);
+			}
+		}
+		script.setAttribute('type', 'text/javascript');
+		parent.appendChild(script);
+	});
+	return;
+};
+
+elementBuilder.prototype.addStylesheet = function(element) {
+	var parent = document.body;
+	element.map(function(obj){
+		var link = document.createElement('link');
+		for(var key in obj) {
+			link.setAttribute(key, obj[key]);
+		}
+		link.setAttribute('type', 'text/css');
+		link.setAttribute('rel', 'stylesheet');
+		parent.appendChild(link);
+	});
+	return;
+};
+
+elementBuilder.prototype.addMeta = function(element) {
+	var parent = document.head;
+	element.map(function(obj){
+		var meta = document.createElement('meta');
+		for(var key in obj) {
+			meta.setAttribute(key, obj[key]);
+		}
+		parent.appendChild(meta);
+	});
+	return;
 };

@@ -10,6 +10,7 @@
 	<div id="anchorContainer"></div>
 	<div id="videoContainer"></div>
 	<div id="audioContainer"></div>
+	<div id="dynamicHTMLContainer"></div>
 <script>
 var eBuilder = new elementBuilder();
 var element = [
@@ -19,8 +20,38 @@ var element = [
 ];
 var elementId = 'anchorContainer';
 
-//eBuilder.generate(element, elementId);
-eBuilder.generate(element);
+var listAttribs = {
+		ul: {id: 'ulId', 'data-id': 'abc', class:'mongo', style: 'padding:4px;margin:5px;'},
+		li:{class: 'bootstrap-init'}
+	};
+
+//eBuilder.createList(element, elementId);
+eBuilder.createList(element, null, listAttribs);
+
+
+
+// var element = [
+// 		{text: 'hi, how are you? salaam-alaikum. ' + Math.random(1, 10), class:'', 'data-node':'google_nodes-anchor', iteration: 1}
+// 	];
+// eBuilder.createContainer(element, 'span');
+
+var element = [
+		{src: 'http://localhost:7777/gseservices/assets/frontend/layout/img/logo.png', class:'', 'data-node':'google_nodes-anchor', id: 'id', alt: 'hi, image', iteration: 1}
+	];
+eBuilder.createContainer(element, 'img', 'dynamicHTMLContainer');
+
+var element = [
+		{src: "https://www.google-analytics.com/analytics.js", async: false},
+		{src: "https://www.google-analytics.com/abc.js", async: true}
+	];
+eBuilder.addScript(element);
+
+
+var element = [
+		{href: "http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all"},
+		{href: "http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;"}
+	];
+eBuilder.addStylesheet(element);
 
 var element = [
 	{
@@ -45,6 +76,14 @@ var element = [
 ];
 eBuilder.createMedia('audio', element);
 
+
+var element = [
+		{content: "width=device-width, initial-scale=1.0", name: 'viewport'},
+		{'http-equiv': "X-UA-Compatible", content: 'IE=edge,chrome=1'},
+		{content: "ABC Shop UI description", name: 'description'},
+		{content: "ABC Shop UI keywords", name: 'keywords'}
+	];
+eBuilder.addMeta(element);
 
 </script>
 </body>
