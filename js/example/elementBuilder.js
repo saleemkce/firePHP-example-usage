@@ -12,6 +12,9 @@ elementBuilder.prototype.createList = function(element, elementId, listAttribs) 
 
 };
 
+/**
+ * [createContainer method to create generic HTML elements in the page]
+ */
 elementBuilder.prototype.createContainer = function(element, elementType, elementId) {
 	var parent = document.body;
 	if(elementId) {
@@ -91,6 +94,9 @@ elementBuilder.prototype.buildSubElements = function(element, elementId, listAtt
 	
 };
 
+/**
+ * [createMedia method to create audio/video elements in page]
+ */
 elementBuilder.prototype.createMedia = function(type, elementArr){
 	var media;
 
@@ -143,6 +149,9 @@ elementBuilder.prototype.createMedia = function(type, elementArr){
 	return media;
 };
 
+/**
+ * [addScript method to add javascripts to the page]
+ */
 elementBuilder.prototype.addScript = function(element) {
 	var parent = document.body;
 	element.map(function(obj){
@@ -162,6 +171,9 @@ elementBuilder.prototype.addScript = function(element) {
 	return;
 };
 
+/**
+ * [addStylesheet method to add stylesheets to the page]
+ */
 elementBuilder.prototype.addStylesheet = function(element) {
 	var parent = document.body;
 	element.map(function(obj){
@@ -176,6 +188,9 @@ elementBuilder.prototype.addStylesheet = function(element) {
 	return;
 };
 
+/**
+ * [addMeta method to add meta tags to header section of the page]
+ */
 elementBuilder.prototype.addMeta = function(element) {
 	var parent = document.head;
 	element.map(function(obj){
