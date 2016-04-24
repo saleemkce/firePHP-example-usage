@@ -157,13 +157,7 @@ elementBuilder.prototype.addScript = function(element) {
 	element.map(function(obj){
 		var script = document.createElement('script');
 		for(var key in obj) {
-			if(key == 'async') {
-				if(obj[key] == true){
-					script.setAttribute(key, '');
-				}
-			} else {
-				script.setAttribute(key, obj[key]);
-			}
+			script.setAttribute(key, obj[key]);
 		}
 		script.setAttribute('type', 'text/javascript');
 		parent.appendChild(script);
