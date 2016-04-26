@@ -41,8 +41,8 @@ var element = [
 eBuilder.createContainer(element, 'img', 'dynamicHTMLContainer');
 
 var element = [
-		{src: "https://www.google-analytics.com/analytics.js", async: false},
-		{src: "https://www.google-analytics.com/abc.js", async: true}
+		{src: "https://www.google-analytics.com/analytics.js", async: false, charset: 'ISO-8859-1'},
+		{src: "https://www.google-analytics.com/abc.js", async: true, charset: 'UTF-8'}
 	];
 eBuilder.addScript(element);
 

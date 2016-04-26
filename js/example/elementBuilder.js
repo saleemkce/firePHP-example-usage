@@ -156,6 +156,10 @@ elementBuilder.prototype.addScript = function(element) {
 	var parent = document.body;
 	element.map(function(obj){
 		var script = document.createElement('script');
+		// check if script's src attribute present.
+		if( !obj.hasOwnProperty('src') || (obj.hasOwnProperty('src') && !obj['src']) ) {
+			console.warn('script URL is mandatory!');
+		}
 		for(var key in obj) {
 			script.setAttribute(key, obj[key]);
 		}
@@ -172,6 +176,10 @@ elementBuilder.prototype.addStylesheet = function(element) {
 	var parent = document.body;
 	element.map(function(obj){
 		var link = document.createElement('link');
+		// check if link's href attribute present.
+		if( !obj.hasOwnProperty('href') || (obj.hasOwnProperty('href') && !obj['href']) ) {
+			console.warn('CSS href attribute is mandatory!');
+		}
 		for(var key in obj) {
 			link.setAttribute(key, obj[key]);
 		}
