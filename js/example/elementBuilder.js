@@ -72,14 +72,11 @@ elementBuilder.prototype.buildSubElements = function(element, elementId, listAtt
 			list.setAttribute(key, listAttribs.li[key]);
 		}
 
-
 		var anchor = document.createElement('a');
 		var text = document.createTextNode(obj['text']);
-		anchor.setAttribute("href", obj['url']);
 
 		for(var key in obj) {
-			    
-		    if(key !== 'text'  && key != 'url') {
+		    if(key !== 'text') {
 		    	anchor.setAttribute(key, obj[key]);
 		    }
 		}
