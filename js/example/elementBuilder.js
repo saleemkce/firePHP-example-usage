@@ -52,6 +52,27 @@ elementBuilder.prototype.createContainer = function(element, elementType, elemen
 	return parent;
 };
 
+/**
+ * [createNestedContainer method to create generic for nested HTML content in the page]
+ */
+elementBuilder.prototype.createNestedContainer = function(element, elementId, html) {
+	var parent = document.body;
+	if(elementId) {
+		parent = document.getElementById(elementId);
+	}
+
+	var htmlCopy = html;
+	element.map(function(obj){
+		for(var key in obj){
+		     htmlCopy = htmlCopy.replace('{{data}}', obj[key]);
+		}
+		console.log(htmlCopy);
+	});
+
+	parent.appendChild(htmlCopy);
+	return parent;
+};
+
 elementBuilder.prototype.buildSubElements = function(element, elementId, listAttribs) {
 	var parent = document.body;
 

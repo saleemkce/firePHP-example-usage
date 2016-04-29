@@ -11,6 +11,7 @@
 	<div id="videoContainer"></div>
 	<div id="audioContainer"></div>
 	<div id="dynamicHTMLContainer"></div>
+	<div id="nestedContainer"></div>
 <script>
 var eBuilder = new elementBuilder();
 var element = [
@@ -34,6 +35,14 @@ eBuilder.createList(element, null, listAttribs);
 // 		{text: 'hi, how are you? salaam-alaikum. ' + Math.random(1, 10), class:'', 'data-node':'google_nodes-anchor', iteration: 1}
 // 	];
 // eBuilder.createContainer(element, 'span');
+
+var element = [
+		// {0,1,2,3,4,5}
+		{0: 'abc', 1: 'url', 2: 'http://www.google.com'}
+	];
+var html = '<div id="{{data}}"><span id="{{data}}"><ul><li><a href="{{data}}">hi</a></li></ul></span></div>';
+eBuilder.createNestedContainer(element, 'nestedContainer', html);
+
 
 var element = [
 		{src: 'http://localhost:7777/gseservices/assets/frontend/layout/img/logo.png', class:'', 'data-node':'google_nodes-anchor', id: 'id', alt: 'hi, image', iteration: 1}
