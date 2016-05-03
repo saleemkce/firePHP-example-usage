@@ -66,10 +66,9 @@ elementBuilder.prototype.createNestedContainer = function(element, elementId, ht
 		for(var key in obj){
 		     htmlCopy = htmlCopy.replace('{{data}}', obj[key]);
 		}
-		console.log(htmlCopy);
 	});
-
-	parent.appendChild(htmlCopy);
+	
+	parent.insertAdjacentHTML( 'beforeend', htmlCopy );
 	return parent;
 };
 
