@@ -61,14 +61,16 @@ elementBuilder.prototype.createNestedContainer = function(element, elementId, ht
 		parent = document.getElementById(elementId);
 	}
 
-	var htmlCopy = html;
+	var htmlCopy, newHtml = '';
 	element.map(function(obj){
+		htmlCopy = html;
 		for(var key in obj){
-		     htmlCopy = htmlCopy.replace('{{data}}', obj[key]);
+		    htmlCopy = htmlCopy.replace('{{data}}', obj[key]);
 		}
+		newHtml += htmlCopy;
 	});
 	
-	parent.insertAdjacentHTML( 'beforeend', htmlCopy );
+	parent.insertAdjacentHTML( 'beforeend', newHtml );
 	return parent;
 };
 
