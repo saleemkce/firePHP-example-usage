@@ -3,6 +3,7 @@
  */
 
 function elementBuilder() {
+	this.pattern = '~data';
 	// elementBuilder contructor function.
 }
 
@@ -56,22 +57,53 @@ elementBuilder.prototype.createContainer = function(element, elementType, elemen
  * [createNestedContainer method to create generic for nested HTML content in the page]
  */
 elementBuilder.prototype.createNestedContainer = function(element, elementId, html) {
-	var parent = document.body;
+	var self = this,
+		parent = document.body;
 	if(elementId) {
 		parent = document.getElementById(elementId);
 	}
+
+	html = this.checkPattern(element, html);
 
 	var htmlCopy, newHtml = '';
 	element.map(function(obj){
 		htmlCopy = html;
 		for(var key in obj){
-		    htmlCopy = htmlCopy.replace('{{data}}', obj[key]);
+		    htmlCopy = htmlCopy.replace(self.pattern, obj[key]);
 		}
 		newHtml += htmlCopy;
 	});
 	
 	parent.insertAdjacentHTML( 'beforeend', newHtml );
 	return parent;
+};
+
+/**
+ * [createNestedContainer method to check if user input contains 
+ * elementBuilder's unique pattern. If so, use temporary pattern to 
+ * preseve user input]
+ */
+elementBuilder.prototype.checkPattern = function(element, html) {
+	var tempPattern = '012_ElE-MENT-BUILD-ER_987',
+		patternFound = false,
+		self = this;
+	element.map(function(obj){
+		for(var key in obj){
+		    if((obj[key]).indexOf(self.pattern) > -1){
+		    	patternFound = true;
+		    }
+		}
+	});
+
+	// check if pattern found in given user input
+	if(patternFound) {
+		var regex = new RegExp(self.pattern, "g");
+		html = html.replace(regex, tempPattern);
+		// now update global pattern
+		self.pattern = tempPattern;
+	}
+	
+	return html;
 };
 
 elementBuilder.prototype.buildSubElements = function(element, elementId, listAttribs) {

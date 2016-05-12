@@ -38,14 +38,14 @@ eBuilder.createList(element, null, listAttribs);
 
 var element = [
 		// {0,1,2,3,4,5}
-		{0: 'abc', 1: 'url', 2: 'http://www.google.com', 3: 'Google'},
+		{0: 'abc', 1: 'url', 2: 'http://www.google.com', 3: 'Google ~data'},
 		{0: 'toc', 1: 'url', 2: 'http://www.facebook.com', 3: 'Facebook'}
 	];
 var html = 
-'<div id="{{data}}">'+
-	'<span id="{{data}}">'+
+'<div id="~data">'+
+	'<span id="~data">'+
 		'<ul>'+
-			'<li><a href="{{data}}">{{data}}</a></li>'+
+			'<li><a href="~data"><span><div>~data</div></span></a></li>'+
 		'</ul>'+
 	'</span>'+
 '</div>';
