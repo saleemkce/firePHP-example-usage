@@ -220,6 +220,10 @@ elementBuilder.prototype.addScript = function(element) {
 	return;
 };
 
+elementBuilder.prototype.getVersion = function(){
+	alert('version is : 1.0');
+};
+
 /**
  * [addStylesheet method to add stylesheets to the page]
  */

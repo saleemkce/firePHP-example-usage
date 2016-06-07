@@ -37,15 +37,26 @@ eBuilder.createList(element, null, listAttribs);
 // eBuilder.createContainer(element, 'span');
 
 var element = [
-		// {0,1,2,3,4,5}
-		{0: 'abc', 1: 'url', 2: 'http://www.google.com', 3: 'Google ~data'},
-		{0: 'toc', 1: 'url', 2: 'http://www.facebook.com', 3: 'Facebook'}
+		{0: 'abc', 1: 'url', 2: 'http://www.google.com', 3: 'Google 1 ~data', 4: 'Goog 2', 5: 'Goog 2', 7: 'sddfs', 8: 'sadfsd'},
+		{0: 'toc', 1: 'url', 2: 'http://www.facebook.com', 3: 'Facebook', 4: 'Face 2', 5: 'Face 2'}
 	];
 var html = 
 '<div id="~data">'+
 	'<span id="~data">'+
-		'<ul>'+
-			'<li><a href="~data"><span><div>~data</div></span></a></li>'+
+		'<ul onclick="addNewScript()">'+
+			'<li><a href="#"><span>'+
+			'<ul>'+
+				'<li>'+
+					'<div>~data</div>'+
+				'</li>'+
+				'<li>'+
+					'<div>~data</div>'+
+				'</li>'+
+				'<li>'+
+					'<div>~data</div>'+
+				'</li>'+
+			'<ul>'+
+			'</span></a></li>'+
 		'</ul>'+
 	'</span>'+
 '</div>';
@@ -101,6 +112,30 @@ var element = [
 		{content: "ABC Shop UI keywords", name: 'keywords'}
 	];
 eBuilder.addMeta(element);
+
+function addNewScript(){
+
+	function callbacky() {
+		alert('I am getting called after addition!');
+	}
+	var eBuilder = new elementBuilder();
+	var element = [
+		{src: "https://www.osipage.com/js/tracking.js", async: true, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/a/tracking.js", async: false, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/b/tracking.js", async: true, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/c/tracking.js", async: false, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/d/tracking.js", async: true, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/e/tracking.js", async: false, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/f/tracking.js", async: true, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/g/tracking.js", async: false, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/h/tracking.js", async: true, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/i/tracking.js", async: false, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/j/tracking.js", async: true, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/k/tracking.js", async: false, charset: 'UTF-8'},
+		{src: "https://www.osipage.com/js/l/tracking.js", async: true, charset: 'UTF-8'}
+	];
+	eBuilder.addScript(element);
+}
 
 </script>
 </body>
