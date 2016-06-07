@@ -89,6 +89,7 @@ eBuilder.addStylesheet(element);
 ```
 
 * To add media tags like audio and video elements
+
 ### Audio Tag
 ```
 var element = [
@@ -102,7 +103,7 @@ var element = [
 ];
 eBuilder.createMedia('video', element);
 ```
-### Vdieo Tag
+### Video Tag
 ```
 var element = [
 	{
