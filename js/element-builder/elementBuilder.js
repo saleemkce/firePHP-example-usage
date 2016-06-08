@@ -228,7 +228,7 @@ elementBuilder.prototype.getVersion = function(){
  * [addStylesheet method to add stylesheets to the page]
  */
 elementBuilder.prototype.addStylesheet = function(element) {
-	var parent = document.body;
+	var parent = document.head;
 	element.map(function(obj){
 		var link = document.createElement('link');
 		// check if link's href attribute present.
