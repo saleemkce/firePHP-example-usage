@@ -1,63 +1,90 @@
 /**
  * TimeOnSiteTracker.js
  *
- * This file tracks time spent on page by user session. 
+ * Time on Site Tracker (TOS)
+ * This file tracks time spent on page by user session.
+ * It exposes getTimeOnSite() API which gives back time spent so far on page. Call any time to get current page's TOS
+ * Provides suppport for blacklisting URL from tracking TOS
+ * Measure your user's interaction with site exactly.
+ * 
  */
 
-var PEPageStart = new Date(),
-	totalTimeSpent = 0,
-	returnInSeconds,
-	callback,
-	timeSpentArr = [];
-	console.log('Time at start: ' + PEPageStart);
+var sitePageStart = new Date(),
+    pageEntryTime = (new Date()).toISOString(),
+    totalTimeSpent = 0,
+    returnInSeconds,
+    isTimeOnSiteAllowed = true,
+    callback,
+    timeSpentArr = [];
+    console.log('Time at page entry: ' + sitePageStart);
 
 var TimeOnSiteTracker = function() {
 };
 
 TimeOnSiteTracker.getTimeDiff = function(startTime, endTime) {
-	var diff;
-	return diff = endTime - startTime;
+    var diff;
+    return diff = endTime - startTime;
 };
 
 TimeOnSiteTracker.addTimeSpent = function(a, b) {
     return a + b;
 };
 
+// URL blacklisting from tracking in "Time on site"
+TimeOnSiteTracker.checkBlacklistUrl = function(blacklistUrl) {
+    var currentPage = document.URL;
+
+    for(var i = 0; i < blacklistUrl.length; i++) {
+        if(blacklistUrl[i].indexOf(currentPage) > -1) {
+            console.log('Page blacklisted from tracking(TOS) : ' + currentPage);
+            return false;
+        }
+    }
+
+    return true;
+};
+
 TimeOnSiteTracker.getTimeOnSite = function() {
-	if(timeSpentArr.length) {
-		totalTimeSpent = timeSpentArr.reduce(TimeOnSiteTracker.addTimeSpent, 0);
-	}
-	var currentTime = new Date(),
-		newTimeSpent = 0;
+    if(timeSpentArr.length) {
+        totalTimeSpent = timeSpentArr.reduce(TimeOnSiteTracker.addTimeSpent, 0);
+    }
+    var currentTime = new Date(),
+        newTimeSpent = 0;
 
-	if(returnInSeconds) {
-		newTimeSpent = totalTimeSpent + ((TimeOnSiteTracker.getTimeDiff(PEPageStart, currentTime))/1000);
-		//console.log('time so far : ' + );
-	} else {
-		newTimeSpent = totalTimeSpent + (TimeOnSiteTracker.getTimeDiff(PEPageStart, currentTime));
-	}
+    if(returnInSeconds) {
+        newTimeSpent = totalTimeSpent + ((TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime))/1000);
+    } else {
+        newTimeSpent = totalTimeSpent + (TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime));
+    }
 
-	var site = {};
-		site.page = {};
-		site.page.URL = document.URL;
-		site.page.title = document.title;
-		site.timeOnPage = Math.round(newTimeSpent);
+    var site = {};
+        site.page = {};
+        site.page.URL = document.URL;
+        site.page.title = document.title;
+        site.page.entryTime = pageEntryTime;
+        site.page.timeOnPage = Math.round(newTimeSpent);
 
-	return site;
-	
+    return site;
+    
 };
 
 TimeOnSiteTracker.start = function(config) {
 
-	if(config && config.seconds === true) {
-		 returnInSeconds = true;
-	}
+    if(config && config.trackBy && (config.trackBy.toLowerCase() === 'seconds')) {
+         returnInSeconds = true;
+    }
 
-	if(config && config.callback) {
-		callback = config.callback;
-	}
+    if(config && config.callback) {
+        callback = config.callback;
+    }
 
-	// check the visiblility of the page
+    if(config && config.blacklistUrl && ((config.blacklistUrl) instanceof Array) && (config.blacklistUrl).length) {
+       if(!TimeOnSiteTracker.checkBlacklistUrl(config.blacklistUrl)) {
+           isTimeOnSiteAllowed = false;
+        }
+    }
+
+    // check the visiblility of the page
     var hidden, visibilityState, visibilityChange;
 
     if (typeof document.hidden !== 'undefined') {
@@ -77,28 +104,29 @@ TimeOnSiteTracker.start = function(config) {
         visibilityState = 'webkitVisibilityState';
     }
 
-
     if (typeof document.addEventListener === 'undefined' || typeof hidden === 'undefined') {
-    	return 'BROWSER_UNSUPPORTED';
+        return 'BROWSER_UNSUPPORTED';
         // not supported
     }
     else {
         document.addEventListener(visibilityChange, function() {
-            switch (document[visibilityState]) {
-            case 'visible':
-            	console.log('on visible');
-            	PEPageStart = new Date();
-            	totalTimeSpent = timeSpentArr.reduce(TimeOnSiteTracker.addTimeSpent, 0);
-            	console.log('time so far : ' + totalTimeSpent);
-				//console.log(timeSpentArr);
-                break;
-            case 'hidden':
-            	console.log('on Invisible');
-            	var currentTime = new Date();
-    			timeSpentArr.push(((TimeOnSiteTracker.getTimeDiff(PEPageStart, currentTime))/1000));
-    			console.log(timeSpentArr);
-                break;
+            if(document[visibilityState] == 'visible') {
+                console.log('on visible');
+                sitePageStart = new Date();
+                totalTimeSpent = timeSpentArr.reduce(TimeOnSiteTracker.addTimeSpent, 0);
+                console.log('Time spent on site so far : ' + totalTimeSpent);
+
+            } else if(document[visibilityState] == 'hidden') {
+                console.log('on Invisible');
+                var currentTime = new Date();
+                if(returnInSeconds) {
+                    timeSpentArr.push(((TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime))/1000));
+                } else {
+                    timeSpentArr.push(TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime));
+                }
+                
             }
+
         }, false);
     }
 
@@ -110,30 +138,36 @@ window.onbeforeunload = function (event) {
         event = window.event;
     }
     if (event) {
-    	console.log('at close: ' + PEPageStart);
+        console.log('At window/tab close: ' + sitePageStart);
 
-    	totalTimeSpent = 0;
-    	if(timeSpentArr.length) {
-			totalTimeSpent = timeSpentArr.reduce(TimeOnSiteTracker.addTimeSpent, 0);
-			console.log('time so far : ' + totalTimeSpent);
-		}
+        totalTimeSpent = 0;
+        if(timeSpentArr.length) {
+            totalTimeSpent = timeSpentArr.reduce(TimeOnSiteTracker.addTimeSpent, 0);
+            console.log('time so far : ' + totalTimeSpent);
+        }
 
-		var currentTime = new Date();
-		if(returnInSeconds) {
-			console.log(totalTimeSpent + ((TimeOnSiteTracker.getTimeDiff(PEPageStart, currentTime))/1000));
-			//console.log('time so far : ' + );
-		} else {
-			console.log(totalTimeSpent + (TimeOnSiteTracker.getTimeDiff(PEPageStart, currentTime)));
-		}
+        var currentTime = new Date();
+        if(returnInSeconds) {
+            console.log(totalTimeSpent + ((TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime))/1000));
+        } else {
+            console.log(totalTimeSpent + (TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime)));
+        }
 
-		console.log('Time at end: ' + currentTime);
-		/**
-		 * execute callback if given in config
-		 */
-    	if(typeof callback === 'function') {
-    		var data = TimeOnSiteTracker.getTimeOnSite();
-			callback(data);
-		}
+        console.log('Time at page exit: ' + currentTime);
+        /**
+         * execute callback if given in config
+         */
+        if(typeof callback === 'function') {
+            var data = TimeOnSiteTracker.getTimeOnSite();
+            data.page.exitTime = (new Date()).toISOString();
+            if(isTimeOnSiteAllowed) {
+                callback(data);
+            } else {
+                data = {};
+                callback(data);
+            }
+            
+        }
 
         event.returnValue = message;
     }
