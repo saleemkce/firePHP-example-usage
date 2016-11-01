@@ -23,6 +23,9 @@ var TimeOnSiteTracker = function(config) {
     // bind to window close event
     this.bindWindowUnload();
 
+    // bind to focus/blur window state
+    this.bindWindowFocus();
+
     if(config && config.trackBy && (config.trackBy.toLowerCase() === 'seconds')) {
          this.returnInSeconds = true;
     }
@@ -37,8 +40,6 @@ var TimeOnSiteTracker = function(config) {
         }
     }
 
-    this.bindWindowFocus();
-
 };
 
 TimeOnSiteTracker.prototype.getTimeDiff = function(startTime, endTime) {
@@ -48,6 +49,15 @@ TimeOnSiteTracker.prototype.getTimeDiff = function(startTime, endTime) {
 
 TimeOnSiteTracker.prototype.addTimeSpent = function(a, b) {
     return a + b;
+};
+
+TimeOnSiteTracker.prototype.arrayAggregate = function(arr) {
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+        sum = sum +  arr[i];
+    }
+
+    return sum;
 };
 
 // URL blacklisting from tracking in "Time on site"
@@ -66,7 +76,7 @@ TimeOnSiteTracker.prototype.checkBlacklistUrl = function(blacklistUrl) {
 
 TimeOnSiteTracker.prototype.getTimeOnSite = function() {
     if(this.timeSpentArr.length) {
-        this.totalTimeSpent = this.timeSpentArr.reduce(this.addTimeSpent, 0);
+        this.totalTimeSpent =  this.arrayAggregate(this.timeSpentArr);
     }
     var currentTime = new Date(),
         newTimeSpent = 0;
@@ -120,7 +130,7 @@ TimeOnSiteTracker.prototype.bindWindowFocus = function() {
             if(document[visibilityState] == 'visible') {
                 console.log('on visible');
                 self.sitePageStart = new Date();
-                self.totalTimeSpent = self.timeSpentArr.reduce(self.addTimeSpent, 0);
+                self.totalTimeSpent = self.arrayAggregate(self.timeSpentArr);
                 console.log('Time spent on site so far : ' + self.totalTimeSpent);
 
             } else if(document[visibilityState] == 'hidden') {
@@ -152,26 +162,19 @@ TimeOnSiteTracker.prototype.bindWindowUnload = function() {
         unloadEvent = window.attachEvent ? 'onbeforeunload' : 'beforeunload'; // make IE7, IE8 compitable
 
     windowAttachEventListener(unloadEvent, function(event) { // For >=IE7, Chrome, Firefox
+        var message = 'Important: Please click on \'Save\' button to leave this page.';
         if (typeof event == 'undefied') {
             event = window.event;
         }
-        if (event) {
+        if (event) {event.returnValue = message;
             console.log('At window/tab close: ' + self.sitePageStart);
 
-            self.totalTimeSpent = 0;
             if(self.timeSpentArr.length) {
-                self.totalTimeSpent = self.timeSpentArr.reduce(self.addTimeSpent, 0);
+                self.totalTimeSpent = self.arrayAggregate(self.timeSpentArr);
                 console.log('time so far : ' + self.totalTimeSpent);
             }
 
-            var currentTime = new Date();
-            if(self.returnInSeconds) {
-                console.log(self.totalTimeSpent + ((self.getTimeDiff(self.sitePageStart, currentTime))/1000));
-            } else {
-                console.log(self.totalTimeSpent + (self.getTimeDiff(self.sitePageStart, currentTime)));
-            }
-
-            console.log('Time at page exit: ' + currentTime);
+            console.log('Time at page exit: ' + new Date());
             /**
              * execute callback if given in config
              */
@@ -187,7 +190,7 @@ TimeOnSiteTracker.prototype.bindWindowUnload = function() {
                 
             }
         }
-    
+        return message;
     });
 
 };
