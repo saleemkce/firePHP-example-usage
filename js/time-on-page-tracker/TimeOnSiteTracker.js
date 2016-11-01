@@ -9,29 +9,49 @@
  * 
  */
 
-var sitePageStart = new Date(),
-    pageEntryTime = (new Date()).toISOString(),
-    totalTimeSpent = 0,
-    returnInSeconds,
-    isTimeOnSiteAllowed = true,
-    callback,
-    timeSpentArr = [];
-    console.log('Time at page entry: ' + sitePageStart);
+var TimeOnSiteTracker = function(config) {
+    
+    this.sitePageStart = new Date(),
+    this.pageEntryTime = (new Date()).toISOString(),
+    this.totalTimeSpent = 0,
+    this.returnInSeconds,
+    this.isTimeOnSiteAllowed = true,
+    this.callback,
+    this.timeSpentArr = [];
+    console.log('Time at page entry: ' + this.sitePageStart);
 
-var TimeOnSiteTracker = function() {
+    // bind to window close event
+    this.bindWindowUnload();
+
+    if(config && config.trackBy && (config.trackBy.toLowerCase() === 'seconds')) {
+         this.returnInSeconds = true;
+    }
+
+    if(config && config.callback) {
+        this.callback = config.callback;
+    }
+
+    if(config && config.blacklistUrl && ((config.blacklistUrl) instanceof Array) && (config.blacklistUrl).length) {
+       if(!this.checkBlacklistUrl(config.blacklistUrl)) {
+           this.isTimeOnSiteAllowed = false;
+        }
+    }
+
+    this.bindWindowFocus();
+
 };
 
-TimeOnSiteTracker.getTimeDiff = function(startTime, endTime) {
+TimeOnSiteTracker.prototype.getTimeDiff = function(startTime, endTime) {
     var diff;
     return diff = endTime - startTime;
 };
 
-TimeOnSiteTracker.addTimeSpent = function(a, b) {
+TimeOnSiteTracker.prototype.addTimeSpent = function(a, b) {
     return a + b;
 };
 
 // URL blacklisting from tracking in "Time on site"
-TimeOnSiteTracker.checkBlacklistUrl = function(blacklistUrl) {
+TimeOnSiteTracker.prototype.checkBlacklistUrl = function(blacklistUrl) {
     var currentPage = document.URL;
 
     for(var i = 0; i < blacklistUrl.length; i++) {
@@ -44,45 +64,32 @@ TimeOnSiteTracker.checkBlacklistUrl = function(blacklistUrl) {
     return true;
 };
 
-TimeOnSiteTracker.getTimeOnSite = function() {
-    if(timeSpentArr.length) {
-        totalTimeSpent = timeSpentArr.reduce(TimeOnSiteTracker.addTimeSpent, 0);
+TimeOnSiteTracker.prototype.getTimeOnSite = function() {
+    if(this.timeSpentArr.length) {
+        this.totalTimeSpent = this.timeSpentArr.reduce(this.addTimeSpent, 0);
     }
     var currentTime = new Date(),
         newTimeSpent = 0;
 
-    if(returnInSeconds) {
-        newTimeSpent = totalTimeSpent + ((TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime))/1000);
+    if(this.returnInSeconds) {
+        newTimeSpent = this.totalTimeSpent + ((this.getTimeDiff(this.sitePageStart, currentTime))/1000);
     } else {
-        newTimeSpent = totalTimeSpent + (TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime));
+        newTimeSpent = this.totalTimeSpent + (this.getTimeDiff(this.sitePageStart, currentTime));
     }
 
     var site = {};
         site.page = {};
         site.page.URL = document.URL;
         site.page.title = document.title;
-        site.page.entryTime = pageEntryTime;
+        site.page.entryTime = this.pageEntryTime;
         site.page.timeOnPage = Math.round(newTimeSpent);
 
     return site;
     
 };
 
-TimeOnSiteTracker.start = function(config) {
-
-    if(config && config.trackBy && (config.trackBy.toLowerCase() === 'seconds')) {
-         returnInSeconds = true;
-    }
-
-    if(config && config.callback) {
-        callback = config.callback;
-    }
-
-    if(config && config.blacklistUrl && ((config.blacklistUrl) instanceof Array) && (config.blacklistUrl).length) {
-       if(!TimeOnSiteTracker.checkBlacklistUrl(config.blacklistUrl)) {
-           isTimeOnSiteAllowed = false;
-        }
-    }
+TimeOnSiteTracker.prototype.bindWindowFocus = function() {
+    var self = this;
 
     // check the visiblility of the page
     var hidden, visibilityState, visibilityChange;
@@ -112,17 +119,18 @@ TimeOnSiteTracker.start = function(config) {
         document.addEventListener(visibilityChange, function() {
             if(document[visibilityState] == 'visible') {
                 console.log('on visible');
-                sitePageStart = new Date();
-                totalTimeSpent = timeSpentArr.reduce(TimeOnSiteTracker.addTimeSpent, 0);
-                console.log('Time spent on site so far : ' + totalTimeSpent);
+                self.sitePageStart = new Date();
+                self.totalTimeSpent = self.timeSpentArr.reduce(self.addTimeSpent, 0);
+                console.log('Time spent on site so far : ' + self.totalTimeSpent);
 
             } else if(document[visibilityState] == 'hidden') {
                 console.log('on Invisible');
                 var currentTime = new Date();
-                if(returnInSeconds) {
-                    timeSpentArr.push(((TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime))/1000));
+                if(self.returnInSeconds) {
+                    console.log(self.timeSpentArr);
+                    (self.timeSpentArr).push(((self.getTimeDiff(self.sitePageStart, currentTime))/1000));
                 } else {
-                    timeSpentArr.push(TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime));
+                    (self.timeSpentArr).push(self.getTimeDiff(self.sitePageStart, currentTime));
                 }
                 
             }
@@ -132,45 +140,54 @@ TimeOnSiteTracker.start = function(config) {
 
 };
 
-window.onbeforeunload = function (event) {
-    var message = 'Important: Please click on \'Save\' button to leave this page.';
-    if (typeof event == 'undefied') {
-        event = window.event;
-    }
-    if (event) {
-        console.log('At window/tab close: ' + sitePageStart);
+/**
+ * [bindWindowUnload]
+ *
+ * A cross browser solution for window unload event.
+ * 
+ */
+TimeOnSiteTracker.prototype.bindWindowUnload = function() {
+    var self = this,
+        windowAttachEventListener = window.attachEvent || window.addEventListener;
+        unloadEvent = window.attachEvent ? 'onbeforeunload' : 'beforeunload'; // make IE7, IE8 compitable
 
-        totalTimeSpent = 0;
-        if(timeSpentArr.length) {
-            totalTimeSpent = timeSpentArr.reduce(TimeOnSiteTracker.addTimeSpent, 0);
-            console.log('time so far : ' + totalTimeSpent);
+    windowAttachEventListener(unloadEvent, function(event) { // For >=IE7, Chrome, Firefox
+        if (typeof event == 'undefied') {
+            event = window.event;
         }
+        if (event) {
+            console.log('At window/tab close: ' + self.sitePageStart);
 
-        var currentTime = new Date();
-        if(returnInSeconds) {
-            console.log(totalTimeSpent + ((TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime))/1000));
-        } else {
-            console.log(totalTimeSpent + (TimeOnSiteTracker.getTimeDiff(sitePageStart, currentTime)));
-        }
-
-        console.log('Time at page exit: ' + currentTime);
-        /**
-         * execute callback if given in config
-         */
-        if(typeof callback === 'function') {
-            var data = TimeOnSiteTracker.getTimeOnSite();
-            data.page.exitTime = (new Date()).toISOString();
-            if(isTimeOnSiteAllowed) {
-                callback(data);
-            } else {
-                data = {};
-                callback(data);
+            self.totalTimeSpent = 0;
+            if(self.timeSpentArr.length) {
+                self.totalTimeSpent = self.timeSpentArr.reduce(self.addTimeSpent, 0);
+                console.log('time so far : ' + self.totalTimeSpent);
             }
-            
-        }
 
-        event.returnValue = message;
-    }
-    return message;
+            var currentTime = new Date();
+            if(self.returnInSeconds) {
+                console.log(self.totalTimeSpent + ((self.getTimeDiff(self.sitePageStart, currentTime))/1000));
+            } else {
+                console.log(self.totalTimeSpent + (self.getTimeDiff(self.sitePageStart, currentTime)));
+            }
+
+            console.log('Time at page exit: ' + currentTime);
+            /**
+             * execute callback if given in config
+             */
+            if(typeof self.callback === 'function') {
+                var data = self.getTimeOnSite();
+                data.page.exitTime = (new Date()).toISOString();
+                if(self.isTimeOnSiteAllowed) {
+                    self.callback(data);
+                } else {
+                    data = {};
+                    self.callback(data);
+                }
+                
+            }
+        }
     
+    });
+
 };
