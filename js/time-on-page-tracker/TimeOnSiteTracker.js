@@ -14,11 +14,18 @@ var TimeOnSiteTracker = function(config) {
     this.sitePageStart = new Date(),
     this.pageEntryTime = (new Date()).toISOString(),
     this.totalTimeSpent = 0,
-    this.returnInSeconds,
+    this.returnInSeconds = false,
     this.isTimeOnSiteAllowed = true,
     this.callback,
     this.timeSpentArr = [];
+    this.config = config;
     console.log('Time at page entry: ' + this.sitePageStart);
+
+    this.initialize(this.config);
+
+};
+
+TimeOnSiteTracker.prototype.initialize = function(config) {
 
     // bind to window close event
     this.bindWindowUnload();
@@ -39,7 +46,6 @@ var TimeOnSiteTracker = function(config) {
            this.isTimeOnSiteAllowed = false;
         }
     }
-
 };
 
 TimeOnSiteTracker.prototype.getTimeDiff = function(startTime, endTime) {
@@ -93,6 +99,7 @@ TimeOnSiteTracker.prototype.getTimeOnSite = function() {
         site.page.title = document.title;
         site.page.entryTime = this.pageEntryTime;
         site.page.timeOnPage = Math.round(newTimeSpent);
+        site.page.timeOnPageTrackedBy = ((this.returnInSeconds === true) ? 'second' : 'millisecond');
 
     return site;
     
@@ -136,8 +143,8 @@ TimeOnSiteTracker.prototype.bindWindowFocus = function() {
             } else if(document[visibilityState] == 'hidden') {
                 console.log('on Invisible');
                 var currentTime = new Date();
+                console.log(self.timeSpentArr);
                 if(self.returnInSeconds) {
-                    console.log(self.timeSpentArr);
                     (self.timeSpentArr).push(((self.getTimeDiff(self.sitePageStart, currentTime))/1000));
                 } else {
                     (self.timeSpentArr).push(self.getTimeDiff(self.sitePageStart, currentTime));
@@ -189,6 +196,13 @@ TimeOnSiteTracker.prototype.bindWindowUnload = function() {
                 }
                 
             }
+
+            // Initialize variables on URL change.
+            self.sitePageStart = new Date(),
+            self.pageEntryTime = (new Date()).toISOString(),
+            self.totalTimeSpent = 0,
+            self.timeSpentArr = [];
+
         }
         return message;
     });
