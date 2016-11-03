@@ -5,19 +5,20 @@
  * This file tracks time spent on page by user session.
  * It exposes getTimeOnSite() API which gives back time spent so far on page. Call any time to get current page's TOS
  * Provides suppport for blacklisting URL from tracking TOS
- * Measure your user's interaction with site exactly.
+ * Measure your user's interaction with site directly and accurately.
  * 
  */
 
 var TimeOnSiteTracker = function(config) {
     
-    this.sitePageStart = new Date(),
-    this.pageEntryTime = (new Date()).toISOString(),
-    this.totalTimeSpent = 0,
-    this.returnInSeconds = false,
-    this.isTimeOnSiteAllowed = true,
-    this.callback,
+    this.sitePageStart = new Date();
+    this.pageEntryTime = (new Date()).toISOString();
+    this.totalTimeSpent = 0;
+    this.returnInSeconds = false;
+    this.isTimeOnSiteAllowed = true;
+    this.callback = null;
     this.timeSpentArr = [];
+    this.trackHashBasedRouting = false;
     this.config = config;
     console.log('Time at page entry: ' + this.sitePageStart);
 
@@ -45,6 +46,13 @@ TimeOnSiteTracker.prototype.initialize = function(config) {
        if(!this.checkBlacklistUrl(config.blacklistUrl)) {
            this.isTimeOnSiteAllowed = false;
         }
+    }
+
+    if(config && config.trackHashBasedRouting && (config.trackHashBasedRouting === true)) {
+        this.trackHashBasedRouting = true;
+
+        // bind to URL change event (without page refresh)
+        this.bindURLChange();
     }
 };
 
@@ -103,6 +111,14 @@ TimeOnSiteTracker.prototype.getTimeOnSite = function() {
 
     return site;
     
+};
+
+TimeOnSiteTracker.prototype.bindURLChange = function() {
+    var self = this;
+    window.onhashchange = function() {
+        alert('URL changes!!!');
+        self.processTOSData();
+    }
 };
 
 TimeOnSiteTracker.prototype.bindWindowFocus = function() {
@@ -176,35 +192,41 @@ TimeOnSiteTracker.prototype.bindWindowUnload = function() {
         if (event) {event.returnValue = message;
             console.log('At window/tab close: ' + self.sitePageStart);
 
-            if(self.timeSpentArr.length) {
-                self.totalTimeSpent = self.arrayAggregate(self.timeSpentArr);
-                console.log('time so far : ' + self.totalTimeSpent);
-            }
-
-            console.log('Time at page exit: ' + new Date());
-            /**
-             * execute callback if given in config
-             */
-            if(typeof self.callback === 'function') {
-                var data = self.getTimeOnSite();
-                data.page.exitTime = (new Date()).toISOString();
-                if(self.isTimeOnSiteAllowed) {
-                    self.callback(data);
-                } else {
-                    data = {};
-                    self.callback(data);
-                }
-                
-            }
-
-            // Initialize variables on URL change.
-            self.sitePageStart = new Date(),
-            self.pageEntryTime = (new Date()).toISOString(),
-            self.totalTimeSpent = 0,
-            self.timeSpentArr = [];
+            self.processTOSData();
 
         }
         return message;
     });
+
+};
+
+TimeOnSiteTracker.prototype.processTOSData = function() {
+
+    if(this.timeSpentArr.length) {
+        this.totalTimeSpent = this.arrayAggregate(this.timeSpentArr);
+        console.log('time so far : ' + this.totalTimeSpent);
+    }
+
+    console.log('Time at page exit: ' + new Date());
+    /**
+     * execute callback if given in config
+     */
+    if(typeof this.callback === 'function') {
+        var data = this.getTimeOnSite();
+        data.page.exitTime = (new Date()).toISOString();
+        if(this.isTimeOnSiteAllowed) {
+            this.callback(data);
+        } else {
+            data = {};
+            this.callback(data);
+        }
+        
+    }
+
+    // Initialize variables on URL change.
+    this.sitePageStart = new Date(),
+    this.pageEntryTime = (new Date()).toISOString(),
+    this.totalTimeSpent = 0,
+    this.timeSpentArr = [];
 
 };
