@@ -58,7 +58,8 @@ TimeOnSiteTracker.prototype.initialize = function(config) {
 
 TimeOnSiteTracker.prototype.getTimeDiff = function(startTime, endTime) {
     var diff;
-    return diff = endTime - startTime;
+    diff = endTime - startTime;
+    return diff;
 };
 
 TimeOnSiteTracker.prototype.addTimeSpent = function(a, b) {
@@ -106,6 +107,7 @@ TimeOnSiteTracker.prototype.getTimeOnSite = function() {
         site.page.URL = document.URL;
         site.page.title = document.title;
         site.page.entryTime = this.pageEntryTime;
+        site.page.currentTime = (new Date()).toISOString();
         site.page.timeOnPage = Math.round(newTimeSpent);
         site.page.timeOnPageTrackedBy = ((this.returnInSeconds === true) ? 'second' : 'millisecond');
 
@@ -190,7 +192,6 @@ TimeOnSiteTracker.prototype.bindWindowUnload = function() {
             event = window.event;
         }
         if (event) {event.returnValue = message;
-            console.log('At window/tab close: ' + self.sitePageStart);
 
             self.processTOSData();
 
