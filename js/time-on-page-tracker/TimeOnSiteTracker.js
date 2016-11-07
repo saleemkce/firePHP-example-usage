@@ -19,6 +19,7 @@ var TimeOnSiteTracker = function(config) {
     this.callback = null;
     this.timeSpentArr = [];
     this.trackHashBasedRouting = false;
+    this.startActivityTime;
     this.config = config;
     console.log('Time at page entry: ' + this.sitePageStart);
 
@@ -75,6 +76,10 @@ TimeOnSiteTracker.prototype.arrayAggregate = function(arr) {
     return sum;
 };
 
+TimeOnSiteTracker.prototype.getTOSId = function() {
+    return Math.floor(new Date().valueOf() * Math.random());
+};
+
 // URL blacklisting from tracking in "Time on site"
 TimeOnSiteTracker.prototype.checkBlacklistUrl = function(blacklistUrl) {
     var currentPage = document.URL;
@@ -102,17 +107,54 @@ TimeOnSiteTracker.prototype.getTimeOnSite = function() {
         newTimeSpent = this.totalTimeSpent + (this.getTimeDiff(this.sitePageStart, currentTime));
     }
 
-    var site = {};
-        site.page = {};
-        site.page.URL = document.URL;
-        site.page.title = document.title;
-        site.page.entryTime = this.pageEntryTime;
-        site.page.currentTime = (new Date()).toISOString();
-        site.page.timeOnPage = Math.round(newTimeSpent);
-        site.page.timeOnPageTrackedBy = ((this.returnInSeconds === true) ? 'second' : 'millisecond');
+    var page = {};
+        page.TOSId = this.getTOSId();
+        page.URL = document.URL;
+        page.title = document.title;
+        page.entryTime = this.pageEntryTime;
+        page.currentTime = (new Date()).toISOString();
+        page.timeOnPage = Math.round(newTimeSpent);
+        page.timeOnPageTrackedBy = ((this.returnInSeconds === true) ? 'second' : 'millisecond');
 
-    return site;
+    return page;
     
+};
+
+TimeOnSiteTracker.prototype.startActivity = function(activityDetails) {
+    if(activityDetails && Object.keys(activityDetails).length) {
+        this.activity = activityDetails;
+    }
+    this.startActivityTime = new Date();
+};
+
+TimeOnSiteTracker.prototype.endActivity = function() {
+    var page = {};
+
+    if(this.startActivityTime) {
+        var endActivityTime = new Date(),
+            activityDuration;
+
+        if(this.returnInSeconds) {
+            activityDuration = ((this.getTimeDiff(this.startActivityTime, endActivityTime))/1000);
+        } else {
+            activityDuration = this.getTimeDiff(this.startActivityTime, endActivityTime);
+        }
+        
+        page.TOSId = this.getTOSId();
+        page.URL = document.URL;
+        page.title = document.title;
+        page.activityStart = (this.startActivityTime).toISOString();
+        page.activityEnd = (new Date()).toISOString();
+        page.activityDuration = Math.round(activityDuration);
+        page.activityDurationTrackedBy = ((this.returnInSeconds === true) ? 'second' : 'millisecond');
+
+        // set activity details in response if given during activity initialization
+        for(var key in this.activity) {
+            page[key] = this.activity[key]
+        }
+    }
+    
+    return page;
 };
 
 TimeOnSiteTracker.prototype.bindURLChange = function() {
