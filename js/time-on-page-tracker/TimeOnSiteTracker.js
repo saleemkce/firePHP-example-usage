@@ -43,11 +43,7 @@ TimeOnSiteTracker.prototype.initialize = function(config) {
         this.callback = config.callback;
     }
 
-    if(config && config.blacklistUrl && ((config.blacklistUrl) instanceof Array) && (config.blacklistUrl).length) {
-       if(!this.checkBlacklistUrl(config.blacklistUrl)) {
-           this.isTimeOnSiteAllowed = false;
-        }
-    }
+    this.initBlacklistUrlConfig(config);
 
     if(config && config.trackHashBasedRouting && (config.trackHashBasedRouting === true)) {
         this.trackHashBasedRouting = true;
@@ -80,13 +76,27 @@ TimeOnSiteTracker.prototype.getTOSId = function() {
     return Math.floor(new Date().valueOf() * Math.random());
 };
 
+TimeOnSiteTracker.prototype.initBlacklistUrlConfig = function(config) {
+    if(config && config.blacklistUrl) {
+
+        if(!((config.blacklistUrl) instanceof Array)) {
+            console.warn('blacklistUrl configuration must be of type array');
+        }
+
+        if(((config.blacklistUrl) instanceof Array) && (config.blacklistUrl).length) {
+            if(!this.checkBlacklistUrl(config.blacklistUrl)) {
+               this.isTimeOnSiteAllowed = false;
+            }
+        }
+    }
+};
+
 // URL blacklisting from tracking in "Time on site"
 TimeOnSiteTracker.prototype.checkBlacklistUrl = function(blacklistUrl) {
     var currentPage = document.URL;
 
     for(var i = 0; i < blacklistUrl.length; i++) {
-        if(blacklistUrl[i].indexOf(currentPage) > -1) {
-            console.log('Page blacklisted from tracking(TOS) : ' + currentPage);
+        if(blacklistUrl[i] === currentPage) {
             return false;
         }
     }
@@ -162,6 +172,7 @@ TimeOnSiteTracker.prototype.bindURLChange = function() {
     window.onhashchange = function() {
         alert('URL changes!!!');
         self.processTOSData();
+        self.initBlacklistUrlConfig(self.config);
     }
 };
 
@@ -189,8 +200,8 @@ TimeOnSiteTracker.prototype.bindWindowFocus = function() {
     }
 
     if (typeof document.addEventListener === 'undefined' || typeof hidden === 'undefined') {
-        return 'BROWSER_UNSUPPORTED';
         // not supported
+        console.log('Browser unsupported!');
     }
     else {
         document.addEventListener(visibilityChange, function() {
@@ -256,7 +267,7 @@ TimeOnSiteTracker.prototype.processTOSData = function() {
      */
     if(typeof this.callback === 'function') {
         var data = this.getTimeOnSite();
-        data.page.exitTime = (new Date()).toISOString();
+        data.exitTime = (new Date()).toISOString();
         if(this.isTimeOnSiteAllowed) {
             this.callback(data);
         } else {
