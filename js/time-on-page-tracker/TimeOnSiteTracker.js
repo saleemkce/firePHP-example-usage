@@ -3,7 +3,7 @@
  *
  * Time on Site Tracker (TOS)
  * This file tracks time spent on page by user session.
- * It exposes getTimeOnSite() API which gives back time spent so far on page. Call any time to get current page's TOS
+ * It exposes getTimeOnPage() API which gives back time spent so far on page. Call any time to get current page's TOS
  * Provides suppport for blacklisting URL from tracking TOS
  * Measure your user's interaction with site directly and accurately.
  * 
@@ -20,6 +20,7 @@ var TimeOnSiteTracker = function(config) {
     this.timeSpentArr = [];
     this.trackHashBasedRouting = false;
     this.startActivityTime;
+    this.storeInLocalStorage = false;
     this.config = config;
     console.log('Time at page entry: ' + this.sitePageStart);
 
@@ -50,6 +51,14 @@ TimeOnSiteTracker.prototype.initialize = function(config) {
 
         // bind to URL change event (without page refresh)
         this.bindURLChange();
+    }
+
+    if(config && config.storeInLocalStorage && (config.storeInLocalStorage === true) && (this.callback === null)) {
+        this.storeInLocalStorage = true;
+    }
+
+    if(config && config.storeInLocalStorage && (config.storeInLocalStorage === true) && this.callback) {
+        console.warn('Both callback and local storage options given. Give either one!');
     }
 };
 
@@ -104,7 +113,7 @@ TimeOnSiteTracker.prototype.checkBlacklistUrl = function(blacklistUrl) {
     return true;
 };
 
-TimeOnSiteTracker.prototype.getTimeOnSite = function() {
+TimeOnSiteTracker.prototype.getTimeOnPage = function() {
     if(this.timeSpentArr.length) {
         this.totalTimeSpent =  this.arrayAggregate(this.timeSpentArr);
     }
@@ -173,6 +182,56 @@ TimeOnSiteTracker.prototype.bindURLChange = function() {
         alert('URL changes!!!');
         self.processTOSData();
         self.initBlacklistUrlConfig(self.config);
+    }
+};
+
+// save time on site data to Local storage.
+TimeOnSiteTracker.prototype.saveToLocalStorage = function() {
+
+    if (typeof(Storage) !== 'undefined') {
+
+        var dateObj = (new Date()),
+            currentDayKey = 'TOS_' + (dateObj.getMonth() + 1) + '_' + dateObj.getDate() + '_' + dateObj.getFullYear(),
+            data = this.getTimeOnPage(),
+            keyFound = false,
+            keyName = 'TimeOnSiteDateKeys',
+            keyArr;
+        
+        keyArr = localStorage.getItem(keyName);
+        if(keyArr) {
+            var dateKeys = JSON.parse(keyArr);
+            
+            for(var j = 0; j < dateKeys.length; j++) {
+                if(dateKeys[j].indexOf(currentDayKey) > -1) {
+                    keyFound = true;
+                    break; 
+                }
+            }
+
+            if(!keyFound) {
+                dateKeys.push(currentDayKey);
+                localStorage.setItem(keyName, JSON.stringify(dateKeys));
+            }
+        } else {
+            keyArr = [];
+            keyArr.push(currentDayKey); 
+            localStorage.setItem(keyName, JSON.stringify(keyArr));
+        }
+
+
+        var item = localStorage.getItem(currentDayKey);
+        if(item) {
+            //console.log('TOS available!');
+            var oldItem = JSON.parse(item);
+            oldItem.push(data)
+            //console.log(oldItem);
+            localStorage.setItem(currentDayKey, JSON.stringify(oldItem));
+        } else {
+            //console.log('new TOS added!');
+            var dataArr = [];
+            dataArr.push(data);
+            localStorage.setItem(currentDayKey, JSON.stringify(dataArr));
+        }
     }
 };
 
@@ -266,7 +325,7 @@ TimeOnSiteTracker.prototype.processTOSData = function() {
      * execute callback if given in config
      */
     if(typeof this.callback === 'function') {
-        var data = this.getTimeOnSite();
+        var data = this.getTimeOnPage();
         data.exitTime = (new Date()).toISOString();
         if(this.isTimeOnSiteAllowed) {
             this.callback(data);
@@ -275,6 +334,8 @@ TimeOnSiteTracker.prototype.processTOSData = function() {
             this.callback(data);
         }
         
+    } else if(this.storeInLocalStorage) {
+        this.saveToLocalStorage();
     }
 
     // Initialize variables on URL change.
