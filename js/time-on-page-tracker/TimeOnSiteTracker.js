@@ -19,8 +19,12 @@ var TimeOnSiteTracker = function(config) {
     this.callback = null;
     this.timeSpentArr = [];
     this.trackHashBasedRouting = false;
-    this.startActivityTime;
     this.storeInLocalStorage = false;
+
+    // TOS activity object
+    this.activity = {};
+    this.activity.activityStarted = false;
+
     this.config = config;
     console.log('Time at page entry: ' + this.sitePageStart);
 
@@ -139,40 +143,63 @@ TimeOnSiteTracker.prototype.getTimeOnPage = function() {
     
 };
 
+/**
+ * [resetActivity It is used for both initializing and resetting activity varibales]
+ */
+TimeOnSiteTracker.prototype.resetActivity = function() {
+    this.activity.startTime = new Date();
+    this.activity.totalTimeSpent = 0;
+    this.activity.totalTimeSpentArr = [];
+};
+
 TimeOnSiteTracker.prototype.startActivity = function(activityDetails) {
     if(activityDetails && Object.keys(activityDetails).length) {
-        this.activity = activityDetails;
+        this.activityDetails = activityDetails;
     }
-    this.startActivityTime = new Date();
+    //this.activity.startTime = new Date();
+    this.activity.activityStarted = true;
+    this.resetActivity();
+    console.log('activity started at : ' + this.activity.startTime)
 };
 
 TimeOnSiteTracker.prototype.endActivity = function() {
     var page = {};
 
-    if(this.startActivityTime) {
+    if(this.activity.activityStarted) {console.log(this.activity.startTime);
         var endActivityTime = new Date(),
-            activityDuration;
+            activityDuration = 0;
+
+        if((this.activity.totalTimeSpentArr).length) {
+            this.activity.totalTimeSpent =  this.arrayAggregate(this.activity.totalTimeSpentArr);
+        }
 
         if(this.returnInSeconds) {
-            activityDuration = ((this.getTimeDiff(this.startActivityTime, endActivityTime))/1000);
+            activityDuration = this.activity.totalTimeSpent + ((this.getTimeDiff(this.activity.startTime, endActivityTime))/1000);
         } else {
-            activityDuration = this.getTimeDiff(this.startActivityTime, endActivityTime);
-        }
+            activityDuration = this.activity.totalTimeSpent + this.getTimeDiff(this.activity.startTime, endActivityTime);
+        }console.log('totalSpent : ' + this.activity.totalTimeSpent + ' in array: '+ ((this.getTimeDiff(this.activity.startTime, endActivityTime))/1000));
         
         page.TOSId = this.getTOSId();
         page.URL = document.URL;
         page.title = document.title;
-        page.activityStart = (this.startActivityTime).toISOString();
+        page.activityStart = (this.activity.startTime).toISOString();
         page.activityEnd = (new Date()).toISOString();
         page.activityDuration = Math.round(activityDuration);
         page.activityDurationTrackedBy = ((this.returnInSeconds === true) ? 'second' : 'millisecond');
 
         // set activity details in response if given during activity initialization
-        for(var key in this.activity) {
-            page[key] = this.activity[key]
+        for(var key in this.activityDetails) {
+            page[key] = this.activityDetails[key]
         }
+
+        this.activity.activityStarted = false;
+        this.resetActivity();
+        console.log('activity ends at ' + new Date());
+
+    } else {
+        console.warn('Please start activity before finishing it!');
     }
-    
+
     return page;
 };
 
@@ -270,6 +297,13 @@ TimeOnSiteTracker.prototype.bindWindowFocus = function() {
                 self.totalTimeSpent = self.arrayAggregate(self.timeSpentArr);
                 console.log('Time spent on site so far : ' + self.totalTimeSpent);
 
+                // compute time duratation for activity if it was started.
+                if(self.activity.activityStarted) {
+                    self.activity.startTime = new Date();
+                    self.activity.totalTimeSpent = self.arrayAggregate(self.activity.totalTimeSpentArr);
+                    console.log('Time spent on ACTIVITY so far : ' + self.activity.totalTimeSpent);
+                }
+
             } else if(document[visibilityState] == 'hidden') {
                 console.log('on Invisible');
                 var currentTime = new Date();
@@ -278,6 +312,16 @@ TimeOnSiteTracker.prototype.bindWindowFocus = function() {
                     (self.timeSpentArr).push(((self.getTimeDiff(self.sitePageStart, currentTime))/1000));
                 } else {
                     (self.timeSpentArr).push(self.getTimeDiff(self.sitePageStart, currentTime));
+                }
+
+                // compute time duratation for activity if it was started.
+                if(self.activity.activityStarted) {
+                    console.log(self.activity.totalTimeSpentArr);
+                    if(self.returnInSeconds) {
+                        (self.activity.totalTimeSpentArr).push(((self.getTimeDiff(self.activity.startTime, currentTime))/1000));
+                    } else {
+                        (self.activity.totalTimeSpentArr).push(self.getTimeDiff(self.activity.startTime, currentTime));
+                    }
                 }
                 
             }
@@ -334,7 +378,7 @@ TimeOnSiteTracker.prototype.processTOSData = function() {
             this.callback(data);
         }
         
-    } else if(this.storeInLocalStorage) {
+    } else if(this.isTimeOnSiteAllowed && this.storeInLocalStorage) {
         this.saveToLocalStorage();
     }
 
@@ -344,4 +388,9 @@ TimeOnSiteTracker.prototype.processTOSData = function() {
     this.totalTimeSpent = 0,
     this.timeSpentArr = [];
 
+    //Reset activity variables
+    if(this.activity.activityStarted) {
+        this.activity.activityStarted = false;
+        this.resetActivity();
+    }
 };
