@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 
 	// Perform queries
-	$qry = "INSERT INTO tos (tos_id, tos_session_key, url, title, entry_time, exit_time, timeonpage, timeonpage_tracked_by, timeonsite, trackingtype, realtime_tracking, transferred_with) VALUES (".$data->TOSId.", '".$data->TOSSessionKey."', '".$data->URL."', '".$data->title."', '".$data->entryTime."', '".$data->exitTime."', ".$data->timeOnPage.", '".$data->timeOnPageTrackedBy."', ".$data->timeOnSite.", '".$data->trackingType."', ".$data->realTimeTracking.", '".$data->trasferredWith."')";
+	$qry = "INSERT INTO activity (tos_id, tos_session_key, url, title, activity_duration, activity_duration_tracked_by, activity_start, activity_end, tracking_type, realtime_tracking, transferred_with) VALUES (".$data->TOSId.", '".$data->TOSSessionKey."', '".$data->URL."', '".$data->title."', ".$data->activityDuration.", '".$data->activityDurationTrackedBy."', '".$data->activityStart."', '".$data->activityEnd."', '".$data->trackingType."', ".$data->realTimeTracking.", '".$data->trasferredWith."')";
 	//echo $qry;
 	$res = mysqli_query($con, $qry);
 
