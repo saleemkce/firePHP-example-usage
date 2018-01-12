@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Cross filter test...</title>
+		<script src="crossfilter.js"></script>
+	</head>
+
+	<body>
+		<h1 style="text-align: center;color: #4e53ff">Crossfilter Overview</h1>
+
+		<h3>See console window for computations...</h3>
+		<script>
+		//console.log(crossfilter);
+
+		var data = crossfilter([
+		  // Fact data.
+		  { name: 'Rusty',  type: 'human', legs: 2 },
+		  { name: 'Alex',   type: 'human', legs: 2 },
+		  { name: 'Alexa',   type: 'human', legs: 2 },
+		  { name: 'Lassie', type: 'dog',   legs: 4 },
+		  { name: 'Spot',   type: 'dog',   legs: 4 },
+		  { name: 'Polly',  type: 'bird',  legs: 2 },
+		  { name: 'Fiona',  type: 'plant', legs: 0 }
+		]);
+		
+		var totalCount = data.groupAll().reduceCount().value();
+		console.log('count : ' +totalCount);
+
+		console.log('---');
+		var totalLegs = data.groupAll().reduceSum(function(d){ return d.legs}).value();
+		console.log('total legs : ' +totalLegs);
+
+		// var totalLegsOther = data.dimension(function(d){return d.legs});
+		// console.log(totalLegsOther);
+		// console.log('total legs : ' +totalLegsOther);
+
+		console.log('---');
+		var legsDimension = data.dimension(function(d){return d.legs});
+		console.log(legsDimension.top(5));
+		console.log('total five legs dimension : ' +legsDimension.top(5));
+
+		console.log('---');
+		console.log(legsDimension.bottom(5));
+		console.log('bottom five legs dimension : ' +legsDimension.bottom(5));
+
+		// Filtering a dimension and finding its count...
+		var typeDimension = data.dimension(function(d) { return d.type; });
+		typeDimension.filter('dog');
+
+		console.log('No. of dogs in type dimension ' + data.groupAll().reduceCount().value());
+
+		typeDimension.filter('human');
+		console.log('No. of humans in type dimension ' + data.groupAll().reduceCount().value());
+
+		console.log('---');
+		console.log('Clearing dimensions...');
+		legsDimension.filterAll();
+		typeDimension.filterAll();
+
+		console.log('---');
+		console.log('Finding no. of facts in each type');
+		// top() api works with group only and not groupAll
+		var typeDimensionCount = typeDimension.group().reduceCount();
+		var countResult = typeDimensionCount.top(Infinity);
+		console.log(countResult);
+		countResult.forEach(function(d, i){
+			if(i === 0) {
+				console.log('Type <-> Count');
+			}
+			console.log(d.key +' : '+d.value);
+		});
+
+		console.log('---');
+		console.log('Top 3 records');
+		console.log(typeDimensionCount.top(3));
+
+		console.log('---');
+		console.log('Adding data to dataset');
+		console.log('Size before adding : ' + data.size())
+		data.add([{ name: 'Andrew',   type: 'human', legs: 2 }])
+		console.log('New size : ' + data.size())
+
+		// console.log('---');
+		// console.log('Finding no. of legs in each type');
+		// typeDimension.group().reduceSum(function(d){ return d.legs });
+		// console.log(typeDimension.top(4));
+		</script>
+	</body>
+</html>
