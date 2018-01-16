@@ -9,20 +9,22 @@
 	<body>
 		<h1 style="text-align: center;color: #4e53ff">Crossfilter Overview</h1>
 
-		<h3>See console window for computations...</h3>
+		<h3 style="text-align: center;">See console window for computations...</h3>
 		<script>
 		//console.log(crossfilter);
 
 		var data = crossfilter([
 		  // Fact data.
-		  { name: 'Rusty',  type: 'human', legs: 2 },
-		  { name: 'Alex',   type: 'human', legs: 2 },
-		  { name: 'Alexa',   type: 'human', legs: 2 },
-		  { name: 'Lassie', type: 'dog',   legs: 4 },
-		  { name: 'Spot',   type: 'dog',   legs: 4 },
-		  { name: 'Polly',  type: 'bird',  legs: 2 },
-		  { name: 'Fiona',  type: 'plant', legs: 0 }
+		  { name: 'Rusty',  type: 'human', legs: 2, created: '2015-01-16 03:16:47'},
+		  { name: 'Alex',   type: 'human', legs: 2, created: '2018-01-16 07:16:47'},
+		  { name: 'Alexa',  type: 'human', legs: 2, created: '2018-01-16 08:16:47'},
+		  { name: 'Lassie', type: 'dog',   legs: 4, created: '2018-01-16 09:16:47'},
+		  { name: 'Spot',   type: 'dog',   legs: 4, created: '2018-01-16 10:16:47'},
+		  { name: 'Polly',  type: 'bird',  legs: 2, created: '2018-01-16 11:16:47'},
+		  { name: 'Fiona',  type: 'plant', legs: 0, created: '2018-01-16 12:16:47'}
 		]);
+
+		//crossfilter.quicksort.by(function(d) { return d.type; });
 		
 		var totalCount = data.groupAll().reduceCount().value();
 		console.log('count : ' +totalCount);
@@ -85,6 +87,28 @@
 		// console.log('Finding no. of legs in each type');
 		// typeDimension.group().reduceSum(function(d){ return d.legs });
 		// console.log(typeDimension.top(4));
+		// 
+		
+		// console.log('---');
+		// console.log('Total size with size() API');
+		// console.log(data.all());
+		
+		// console.log('---');
+		// console.log('compound dimension..');
+		// var nameTypeDimension = data.dimension(function(d) {return d.name + '-' + d.type;});
+		// console.log(nameTypeDimension.top(2));
+
+		console.log('---');
+		console.log('Grouping by hour..')
+		var dateDimension = data.dimension(function(d){ return d.created; });
+		var hoursDimension = dateDimension.group(function(d){ return (new Date(d)).getHours(); });
+		console.log(hoursDimension.top(3));
+
+		console.log('---');
+		console.log('Grouping by year..')
+		var dateDimension = data.dimension(function(d){ return d.created; });
+		var yearsDimension = dateDimension.group(function(d){ return (new Date(d)).getFullYear(); });
+		console.log(yearsDimension.top(Infinity));
 		</script>
 	</body>
 </html>
