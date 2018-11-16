@@ -1,0 +1,60 @@
+Innodb buffer optimize:
+
+-- innodb_buffer_pool_chunk_size
+-- innodb_buffer_pool_instances
+-- innodb_buffer_pool_size   (some large size)
+	
+    /*
+	
+    Desirable:
+    innodb_buffer_pool_chunk_size = 536870912
+	innodb_buffer_pool_instances = 4
+	innodb_buffer_pool_size = (536870912 * 4) * 8 = 17179869184
+    
+    Existing:
+    innodb_buffer_pool_chunk_size = 805306368
+	innodb_buffer_pool_instances = 2
+	innodb_buffer_pool_size = 1610612736
+    
+    POSSIBLES, 
+    4 instance : (52000000 * 4) * 8
+    8 instance: (26000000 * 8) * 8
+    
+    NEW for 4:
+    // (60000000 * 4) * 8
+    innodb_buffer_pool_chunk_size = 60000000
+    innodb_buffer_pool_instances = 4
+	innodb_buffer_pool_size = 1920000000
+    
+    NEW for 8:
+    / (30000000 * 8) * 8
+    innodb_buffer_pool_chunk_size = 30000000
+    innodb_buffer_pool_instances = 8
+	innodb_buffer_pool_size = 1920000000
+    
+    --REFS:
+    https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ModifyInstance.MySQL.html
+    https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithParamGroups.html
+    https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ModifyInstance.MySQL.html#USER_ModifyInstance.MySQL.Settings
+    https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RebootInstance.html
+    
+    */
+    
+    -- 134217728
+		
+    use FACP_NEW;
+    SHOW VARIABLES LIKE 'innodb_buffer_pool_chunk_size';
+    SHOW VARIABLES LIKE 'innodb_buffer_pool_instances';
+    SHOW VARIABLES LIKE 'innodb_buffer_pool_size';
+    SHOW STATUS LIKE '%key_read%';
+    SHOW STATUS LIKE 'thread%';
+    SHOW VARIABLES LIKE 'have_query_cache';
+    -- 1610612736
+    -- 17179869184
+	
+    SHOW ENGINE INNODB STATUS;
+	SELECT version();
+    
+	SHOW table status;
+	SELECT TABLE_NAME, INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = 'FACP_NEW'  and INDEX_NAME !='PRIMARY' order by table_name ASC;
+	SHOW GLOBAL STATUS LIKE 'Opened_tables';
