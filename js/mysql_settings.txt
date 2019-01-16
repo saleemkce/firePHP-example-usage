@@ -1,4 +1,4 @@
-Innodb buffer optimize:
+Innodb buffer optimize --
 
 -- innodb_buffer_pool_chunk_size
 -- innodb_buffer_pool_instances
